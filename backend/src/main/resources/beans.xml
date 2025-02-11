@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Definicje składników -->
+    <bean id="ingredient1" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="1" />
+        <constructor-arg index="1" value="kitkat" />
+    </bean>
+
+    <bean id="ingredient2" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="2" />
+        <constructor-arg index="1" value="chocolate syrup" />
+    </bean>
+
+    <bean id="ingredient3" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="3" />
+        <constructor-arg index="1" value="ice cream" />
+    </bean>
+
+    <bean id="ingredient4" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="4" />
+        <constructor-arg index="1" value="cola zero" />
+    </bean>
+
+    <bean id="ingredient5" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="5" />
+        <constructor-arg index="1" value="chocolate" />
+    </bean>
+
+    <bean id="ingredient6" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="6" />
+        <constructor-arg index="1" value="strawberry syrup" />
+    </bean>
+
+    <bean id="ingredient7" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="7" />
+        <constructor-arg index="1" value="milk" />
+    </bean>
+
+    <bean id="ingredient8" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="8" />
+        <constructor-arg index="1" value="chicken patty" />
+    </bean>
+
+    <bean id="ingredient9" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="9" />
+        <constructor-arg index="1" value="lettuce" />
+    </bean>
+
+    <bean id="ingredient10" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="10" />
+        <constructor-arg index="1" value="tomato" />
+    </bean>
+
+    <bean id="ingredient11" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="11" />
+        <constructor-arg index="1" value="onion" />
+    </bean>
+
+    <bean id="ingredient12" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="12" />
+        <constructor-arg index="1" value="pickles" />
+    </bean>
+
+    <bean id="ingredient13" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="13" />
+        <constructor-arg index="1" value="cheese" />
+    </bean>
+
+    <bean id="ingredient14" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="14" />
+        <constructor-arg index="1" value="mayo" />
+    </bean>
+
+    <bean id="ingredient15" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="15" />
+        <constructor-arg index="1" value="chicken strips" />
+    </bean>
+
+    <bean id="ingredient16" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="16" />
+        <constructor-arg index="1" value="cucumber" />
+    </bean>
+
+    <bean id="ingredient17" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="17" />
+        <constructor-arg index="1" value="ranch sauce" />
+    </bean>
+
+    <bean id="ingredient18" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="18" />
+        <constructor-arg index="1" value="salt" />
+    </bean>
+
+    <bean id="ingredient19" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="19" />
+        <constructor-arg index="1" value="chicken" />
+    </bean>
+
+    <bean id="ingredient20" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="20" />
+        <constructor-arg index="1" value="beef patty" />
+    </bean>
+
+    <bean id="ingredient21" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="21" />
+        <constructor-arg index="1" value="ketchup" />
+    </bean>
+
+    <bean id="ingredient22" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="22" />
+        <constructor-arg index="1" value="mustard" />
+    </bean>
+
+    <bean id="ingredient23" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="23" />
+        <constructor-arg index="1" value="big mac sauce" />
+    </bean>
+
+    <bean id="ingredient24" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="24" />
+        <constructor-arg index="1" value="fish patty" />
+    </bean>
+
+    <bean id="ingredient25" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="25" />
+        <constructor-arg index="1" value="tartar sauce" />
+    </bean>
+
+    <bean id="ingredient26" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="26" />
+        <constructor-arg index="1" value="caramel syrup" />
+    </bean>
+
+    <bean id="ingredient27" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="27" />
+        <constructor-arg index="1" value="coffee" />
+    </bean>
+
+    <bean id="ingredient28" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="28" />
+        <constructor-arg index="1" value="parmesan" />
+    </bean>
+
+    <bean id="ingredient29" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="29" />
+        <constructor-arg index="1" value="croutons" />
+    </bean>
+
+    <bean id="ingredient30" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="30" />
+        <constructor-arg index="1" value="caesar dressing" />
+    </bean>
+
+    <bean id="ingredient31" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="31" />
+        <constructor-arg index="1" value="breading" />
+    </bean>
+
+    <bean id="ingredient32" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="32" />
+        <constructor-arg index="1" value="spicy breading" />
+    </bean>
+
+    <bean id="ingredient33" class="com.kiosk.backend.model.entity.Ingredient">
+        <constructor-arg index="0" value="33" />
+        <constructor-arg index="1" value="sprite" />
+    </bean>
+
+</beans>
