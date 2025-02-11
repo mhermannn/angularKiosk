@@ -1,0 +1,14 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 20px;
+  }
+  
+  button {
+    width: 200px;
+    margin: 10px;
+    cursor: pointer;
+  }
