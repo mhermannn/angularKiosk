@@ -8,6 +8,9 @@
   
   .ad-banner img {
     width: 100%;
-    max-width: 400px;
+    max-width: 100vw;
     border-radius: 8px;
+  }
+  .ad-banner {
+    width: 60vw;
   }

@@ -1,3 +1,18 @@
-<header class="header" [routerLink]="['/']">
-  <img class="logo" src="assets/logo.svg" alt="Logo">
+<header class="header">
+  <img class="logo" src="assets/logo.svg" alt="Logo" [routerLink]="['/']">
+  
+  @if (authService.isLoggedIn()) {
+    <div class="user-info">
+      <span>Hi, {{ authService.getCurrentUser() }}</span>
+      <button (click)="goToUserAccount()">Account</button>
+      <button (click)="logout()">Logout</button>
+      <button (click)="goToCart()">
+        Cart ({{ getCartItemCount() }})
+      </button>
+    </div>
+  } @else {
+    <div class="login-prompt">
+      <button [routerLink]="['/login']">Login</button>
+    </div>
+  }
 </header>

@@ -1,8 +1,12 @@
+// meal-list.component.ts
 import { Component, OnInit } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RangePipe } from '../../range.pipe';
+import { Router } from '@angular/router';
+import { OrderService } from '../../services/order.service';
+
 interface Meal {
   id: number;
   name: string;
@@ -19,9 +23,9 @@ interface Meal {
   standalone: true,
 })
 export class MealListComponent implements OnInit {
-  meals: Meal[] = []; 
-  filteredMeals: Meal[] = []; 
-  displayedMeals: Meal[] = []; 
+  meals: Meal[] = [];
+  filteredMeals: Meal[] = [];
+  displayedMeals: Meal[] = [];
 
   // Pagination
   itemsPerPageOptions = [4, 8, 16];
@@ -43,7 +47,11 @@ export class MealListComponent implements OnInit {
   sortOptions = ['Low to High', 'High to Low'];
   selectedSort = 'Low to High';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private orderService: OrderService
+  ) {}
 
   ngOnInit(): void {
     this.fetchMeals();
@@ -115,4 +123,11 @@ export class MealListComponent implements OnInit {
     this.applyFilters();
   }
 
+  viewMealDetails(mealId: number): void {
+    this.router.navigate(['/meal-details', mealId]);
+  }
+
+  addToCart(mealName: string): void {
+    this.orderService.addToCart(mealName);
+  }
 }

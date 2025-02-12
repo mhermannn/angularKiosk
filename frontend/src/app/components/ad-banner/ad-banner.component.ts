@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrl: './ad-banner.component.scss',
 })
 export class AdBannerComponent {
-  private adUrl = 'https://mcdonalds.pl/';
+  private adUrl = 'https://mcdonalds.pl/dni--zmakowanych/';
 
   constructor(private router: Router) {}
 

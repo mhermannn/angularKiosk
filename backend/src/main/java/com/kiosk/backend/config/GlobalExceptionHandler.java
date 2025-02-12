@@ -1,5 +1,7 @@
 package com.kiosk.backend.config;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,9 +19,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleGenericException(Exception ex, Model model) {
-        ModelAndView modelAndView = new ModelAndView("error");
-        model.addAttribute("errorMessage", "Wystąpił nieoczekiwany błąd: " + ex.getMessage());
-        return modelAndView;
+    public ResponseEntity<Object> handleGenericException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("{\"error\": \"Unexpected error occurred: " + ex.getMessage() + "\"}");
     }
 }

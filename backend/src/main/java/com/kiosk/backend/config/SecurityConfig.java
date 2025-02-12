@@ -4,6 +4,8 @@ import com.kiosk.backend.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,13 +25,28 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        System.out.println("not in userDetailsService but in authenticationManager");
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByLogin(username)
-                .map(user -> org.springframework.security.core.userdetails.User.withUsername(user.getLogin())
-                        .password(user.getPassword())
-                        .authorities("ROLE_" + user.getRole().toUpperCase())
-                        .build())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return username -> {
+            System.out.println("Loading user: " + username); // Log the username
+            return userRepository.findByLogin(username)
+                    .map(user -> {
+                        System.out.println("User found: " + user.getLogin() + ", Role: " + user.getRole()); // Log user details
+                        return org.springframework.security.core.userdetails.User.withUsername(user.getLogin())
+                                .password(user.getPassword())
+                                .authorities("ROLE_" + user.getRole().toUpperCase())
+                                .build();
+                    })
+                    .orElseThrow(() -> {
+                        System.out.println("User not found: " + username); // Log if user is not found
+                        return new UsernameNotFoundException("User not found: " + username);
+                    });
+        };
     }
 
 
@@ -43,11 +60,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/", "/login", "/oauth2/**", "/productlist", "/images/**", "/css/**", "/static/**", "/webjars/**").permitAll()
 
                         // Admin-only endpoints
                         .requestMatchers("/adminPage", "/adminChange").hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         // API endpoints
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // Allow all users to retrieve data
                         .requestMatchers(HttpMethod.POST, "/api/**").authenticated() // Only logged-in users can create data

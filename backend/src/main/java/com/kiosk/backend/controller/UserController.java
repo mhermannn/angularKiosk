@@ -1,5 +1,6 @@
 package com.kiosk.backend.controller;
 
+import com.kiosk.backend.dto.RegisterRequest;
 import com.kiosk.backend.model.entity.User;
 import com.kiosk.backend.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -77,4 +79,40 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+        try {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            Optional<User> existingUser = userModel.getAllUsers().stream()
+                    .filter(u -> u.getLogin().equals(registerRequest.getUsername()))
+                    .findFirst();
+
+            if (existingUser.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Username already exists"));
+            }
+
+            // Create a new user
+            User newUser = new User();
+            newUser.setLogin(registerRequest.getUsername());
+            System.out.println(newUser);
+//            newUser.setId((userModel.getAllUsers().toArray().length) + 1);
+//            System.out.println(newUser);
+            newUser.setPassword(registerRequest.getPassword());
+            System.out.println(newUser);// Hash the password
+            newUser.setRole("USER");
+            System.out.println(newUser);// Default role for new users
+            newUser.setResources(50.0); // Default resources for new users
+            System.out.println(newUser);
+            userModel.addUser(newUser);
+            System.out.println("User registered successfully: " + registerRequest.getUsername());
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User registered successfully"));
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Print stack trace to console for debugging
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "An error occurred during registration: " + e.getMessage()));
+        }
+    }
+
 }

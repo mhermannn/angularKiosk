@@ -1,20 +1,35 @@
 .meal-list {
-    padding: 20px;
+    padding: 40px;
   
     .search-bar {
       margin-bottom: 20px;
       input {
-        width: 100%;
+        width: 80%;
         padding: 10px;
         font-size: 16px;
       }
     }
   
     .filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
-      .category-filter {
-        margin-bottom: 10px;
+      margin-left: 5vw;
+      margin-right: 5vw;
+      .cat{
+        .for{
+          display: flex;
+        }
+        // .category-filter {
+        //   display: flex;
+        //   margin-bottom: 10px;
+        // }
       }
+      .sor{
+        display: flex;
+      }
+      
     }
   
     .meal-tiles {

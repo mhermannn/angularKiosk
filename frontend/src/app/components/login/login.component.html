@@ -1,1 +1,36 @@
-<p>login works!</p>
+<div class="login-container">
+  <h1>Login</h1>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        [(ngModel)]="username"
+        name="username"
+        placeholder="Enter your username"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        [(ngModel)]="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+      />
+    </div>
+
+    <button type="submit">Login</button>
+  </form>
+
+  @if (showPopup) {
+    <div class="popup">
+      {{ popupMessage }}
+    </div>
+  }
+</div>

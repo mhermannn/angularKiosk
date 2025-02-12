@@ -11,26 +11,32 @@
   </div>
 
   <div class="filters">
-    <h3>Categories</h3>
-    @for (category of categories; track category) {
-      <div class="category-filter">
-        <label>
-          <input
-            type="checkbox"
-            [value]="category"
-            (change)="onCategoryChange(category, $event)"
-          />
-          {{ category }}
-        </label>
+    <div class="cat">
+      <h3>Categories</h3>
+      <div class="for">
+        @for (category of categories; track category) {
+          <div class="category-filter">
+            <label>
+              <input
+                type="checkbox"
+                [value]="category"
+                (change)="onCategoryChange(category, $event)"
+              />
+              {{ category }}
+            </label>
+          </div>
+        }
       </div>
-    }
+    </div>
 
-    <h3>Sort by Price</h3>
-    <select [(ngModel)]="selectedSort" (change)="onSortChange()">
-      @for (option of sortOptions; track option) {
-        <option [value]="option">{{ option }}</option>
-      }
-    </select>
+    <div class="sor">
+      <h3>Sort by Price</h3>
+      <select [(ngModel)]="selectedSort" (change)="onSortChange()">
+        @for (option of sortOptions; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+    </div>
   </div>
 
   <div class="meal-tiles">
@@ -39,6 +45,8 @@
         <img [src]="'assets/' + meal.id + '.jpg'" [alt]="meal.name" />
         <h3>{{ meal.name }}</h3>
         <p>{{ meal.price }} €</p>
+        <button (click)="viewMealDetails(meal.id)">See More</button>
+        <button (click)="addToCart(meal.name)">Add to Cart</button>
       </div>
     }
   </div>
