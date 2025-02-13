@@ -1,0 +1,33 @@
+@if (isVisible) {
+    <div class="modal">
+      <div class="modal-content">
+        <h2>Delete Meals</h2>
+        <form [formGroup]="deleteMealForm" (ngSubmit)="onSubmit()">
+          <div formArrayName="meals">
+            @for (mealControl of mealsFormArray.controls; track i; let i = $index) {
+              <div class="form-group">
+                <label for="meal-{{i}}">Meal {{i + 1}}:</label>
+                <select [formControlName]="i" (change)="onMealSelect(i)">
+                  <option value="">Select a meal</option>
+                  @for (meal of availableMeals; track meal.id) {
+                    <option [value]="meal.id">{{ meal.name }}</option>
+                  }
+                </select>
+                <button type="button" (click)="removeMealDropdown(i)">Remove</button>
+              </div>
+            }
+          </div>
+          <button type="button" (click)="addMealDropdown()">Add Another Meal</button>
+          @if (validationMessage) {
+            <div class="validation-message">
+              {{ validationMessage }}
+            </div>
+          }
+          <div class="form-actions">
+            <button type="button" (click)="onClose()">Cancel</button>
+            <button type="submit">Delete Meals</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }

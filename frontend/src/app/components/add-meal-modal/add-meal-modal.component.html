@@ -1,4 +1,4 @@
-<div class="modal" *ngIf="isVisible">
+@if (isVisible) {
     <div class="modal-content">
       <h2>Add New Meal</h2>
       <form (ngSubmit)="onSubmit()">
@@ -40,4 +40,4 @@
         </div>
       </form>
     </div>
-  </div>
+    }

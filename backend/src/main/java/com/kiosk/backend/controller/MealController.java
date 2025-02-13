@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -80,9 +81,17 @@ public class MealController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMeal(@PathVariable int id) {
+    public ResponseEntity<Map<String, String>> deleteMeal(@PathVariable int id, Authentication authentication) {
+        if (!isAdmin(authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Only admins can delete meals"));
+        }
         boolean deleted = kioskService.getMealModel().deleteMeal(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        kioskService.saveMealsToCSV();
+        if (deleted) {
+            return ResponseEntity.ok(Map.of("message", "Meal with ID " + id + " deleted"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Meal not found"));
+        }
     }
 
     @PostMapping("/{mealId}/ingredients/{ingredientId}")

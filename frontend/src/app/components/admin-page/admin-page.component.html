@@ -1,20 +1,37 @@
 <div class="admin-page">
-    <h1>Orders</h1>
+  <h1>Admin Dashboard</h1>
 
-    <div class="go-back-button">
-        <button (click)="goBack()">Go Back</button>
-      </div>
+  <div class="go-back-button">
+    <button (click)="goBack()">Go Back</button>
+  </div>
 
-      <div class="add-meal-button">
-        <button (click)="openAddMealModal()">Add Meal</button>
-      </div>
-    
-      <app-add-meal-modal
-        [isVisible]="isAddMealModalVisible"
-        (closeModal)="closeAddMealModal()"
-        (mealAdded)="onMealAdded($event)"
-      ></app-add-meal-modal>
+  <div class="add-meal-button">
+    <button (click)="openAddMealModal()">Add Meal</button>
+  </div>
+
+  <app-add-meal-modal
+    [isVisible]="isAddMealModalVisible"
+    (closeModal)="closeAddMealModal()"
+    (mealAdded)="onMealAdded($event)"
+  ></app-add-meal-modal>
+
+  <div class="delete-meal-button">
+    <button (click)="openDeleteMealModal()">Delete Meal</button>
+  </div>
   
+  <app-delete-meal-modal
+    [isVisible]="isDeleteMealModalVisible"
+    (closeModal)="closeDeleteMealModal()"
+    (mealsDeleted)="onMealDeleted($event)"
+  ></app-delete-meal-modal>
+
+  <div class="toggle-orders">
+    <button (click)="toggleOrders()">
+      {{ showOrders ? 'Hide Orders' : 'See Orders' }}
+    </button>
+  </div>
+
+  @if (showOrders) {
     <div class="filters">
       <div class="sort">
         <h3>Sort by Date</h3>
@@ -25,7 +42,7 @@
         </select>
       </div>
     </div>
-  
+
     <div class="order-tiles">
       @for (order of displayedOrders; track order.orderId) {
         <div class="order-tile">
@@ -44,7 +61,7 @@
         </div>
       }
     </div>
-  
+
     <div class="pagination">
       @for (page of totalPages | range: 1; track page) {
         <button
@@ -55,7 +72,7 @@
         </button>
       }
     </div>
-  
+
     <div class="items-per-page">
       <label>Items per page:</label>
       <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
@@ -64,4 +81,5 @@
         }
       </select>
     </div>
-  </div>
+  }
+</div>

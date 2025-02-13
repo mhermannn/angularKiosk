@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RangePipe } from '../../range.pipe';
 import { Router } from '@angular/router';
 import { AddMealModalComponent } from '../add-meal-modal/add-meal-modal.component'; 
+import { DeleteMealModalComponent } from '../delete-meal-modal/delete-meal-modal.component';
 
 interface Order {
   orderId: number;
@@ -18,7 +19,7 @@ interface Order {
 
 @Component({
   selector: 'app-admin-page',
-  imports: [CommonModule, FormsModule, RangePipe, AddMealModalComponent], 
+  imports: [CommonModule, FormsModule, RangePipe, AddMealModalComponent, DeleteMealModalComponent], 
   templateUrl: './admin-page.component.html',
   styleUrl: './admin-page.component.scss',
   standalone: true,
@@ -35,7 +36,9 @@ export class AdminPageComponent implements OnInit {
   sortOptions = ['Newest to Oldest', 'Oldest to Newest'];
   selectedSort = 'Newest to Oldest';
 
+  showOrders: boolean = false;
   isAddMealModalVisible: boolean = false; 
+  isDeleteMealModalVisible: boolean = false; 
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -93,9 +96,27 @@ export class AdminPageComponent implements OnInit {
     this.isAddMealModalVisible = true;
   }
 
+  openDeleteMealModal(): void {
+    this.isDeleteMealModalVisible = true;
+  }
+
+  toggleOrders(): void {
+    this.showOrders = !this.showOrders;
+  }
+
   closeAddMealModal(): void {
     this.isAddMealModalVisible = false;
   }
+
+  closeDeleteMealModal(): void {
+    this.isDeleteMealModalVisible = false;
+  }
+
+  onMealDeleted(deletedMealIds: number[]): void {
+    console.log('Meals deleted:', deletedMealIds);
+    this.closeDeleteMealModal();
+  }
+
   onMealAdded(newMeal: any): void {
     console.log('New meal added:', newMeal);
     this.closeAddMealModal(); 
