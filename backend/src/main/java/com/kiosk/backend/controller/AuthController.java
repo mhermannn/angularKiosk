@@ -35,12 +35,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
-            System.out.println("Attempting to authenticate user: " + request.getUsername()); // Log the username
+            System.out.println("Attempting to authenticate user: " + request.getUsername());
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
-            System.out.println("Authentication successful for user: " + request.getUsername()); // Log success
+            System.out.println("Authentication successful for user: " + request.getUsername());
 
             // Fetch the user from the database to get the ID
             Optional<User> userOptional = userRepository.findByLogin(request.getUsername());
@@ -51,11 +51,10 @@ public class AuthController {
             User user = userOptional.get();
             String token = jwtUtil.generateToken(user.getLogin());
 
-            // Return the token, userId, and username in the response
-            return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getLogin()));
+            return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getLogin(), user.getRole(), user.getResources()));
 
         } catch (Exception e) {
-            System.out.println("Authentication failed for user: " + request.getUsername() + ", Error: " + e.getMessage()); // Log failure
+            System.out.println("Authentication failed for user: " + request.getUsername() + ", Error: " + e.getMessage());
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Invalid credentials");
             return ResponseEntity.status(401).body(errorResponse);
