@@ -45,7 +45,7 @@ export class MealListComponent implements OnInit {
     'CHICKEN',
   ];
   selectedCategories: string[] = [];
-  sortOptions = ['Low to High', 'High to Low'];
+  sortOptions = ['Low to High', 'High to Low', 'A to Z', 'Z to A'];
   selectedSort = 'Low to High';
 
   constructor(
@@ -70,21 +70,26 @@ export class MealListComponent implements OnInit {
     this.filteredMeals = this.meals.filter((meal) =>
       meal.name.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
-
+  
     if (this.selectedCategories.length > 0) {
       this.filteredMeals = this.filteredMeals.filter((meal) =>
         this.selectedCategories.includes(meal.category)
       );
     }
-
+  
     if (this.selectedSort === 'Low to High') {
       this.filteredMeals.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-    } else {
+    } else if (this.selectedSort === 'High to Low') {
       this.filteredMeals.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else if (this.selectedSort === 'A to Z') {
+      this.filteredMeals.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (this.selectedSort === 'Z to A') {
+      this.filteredMeals.sort((a, b) => b.name.localeCompare(a.name));
     }
-
+  
     this.updatePagination();
   }
+  
 
   updatePagination(): void {
     this.totalPages = Math.ceil(this.filteredMeals.length / this.itemsPerPage);
