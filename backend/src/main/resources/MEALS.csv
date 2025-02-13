@@ -16,3 +16,4 @@ id,name,category,price,ingredients
 15,Onion Rings,FRIES_SIDES,3.29,"onion,breading,salt"
 16,Spicy Nuggets,CHICKEN,4.99,"chicken,spicy breading"
 17,New Meal,DESSERTS_ICECREAM,5.99,"kitkat,chocolate syrup"
+18,carmel coffe,HOT_DRINKS,3,"caramel syrup,coffee"
