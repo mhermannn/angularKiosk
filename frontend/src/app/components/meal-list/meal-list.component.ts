@@ -1,4 +1,3 @@
-// meal-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -28,7 +27,6 @@ export class MealListComponent implements OnInit {
   filteredMeals: Meal[] = [];
   displayedMeals: Meal[] = [];
 
-  // Pagination
   itemsPerPageOptions = [4, 8, 16];
   itemsPerPage = 8;
   currentPage = 1;
@@ -136,5 +134,11 @@ export class MealListComponent implements OnInit {
 
   addToCart(mealName: string): void {
     this.orderService.addToCart(mealName);
+  }
+
+  getMealImage(mealId: number): string {
+    const imagePath = `assets/${mealId}.jpg`;
+    const backupImagePath = 'assets/backup.png';
+    return mealId <= 16 ? imagePath : backupImagePath;
   }
 }

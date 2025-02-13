@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RangePipe } from '../../range.pipe';
 import { Router } from '@angular/router';
+import { AddMealModalComponent } from '../add-meal-modal/add-meal-modal.component'; 
 
 interface Order {
   orderId: number;
@@ -17,7 +18,7 @@ interface Order {
 
 @Component({
   selector: 'app-admin-page',
-  imports: [CommonModule, FormsModule, RangePipe],
+  imports: [CommonModule, FormsModule, RangePipe, AddMealModalComponent], 
   templateUrl: './admin-page.component.html',
   styleUrl: './admin-page.component.scss',
   standalone: true,
@@ -33,6 +34,8 @@ export class AdminPageComponent implements OnInit {
 
   sortOptions = ['Newest to Oldest', 'Oldest to Newest'];
   selectedSort = 'Newest to Oldest';
+
+  isAddMealModalVisible: boolean = false; 
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -84,5 +87,17 @@ export class AdminPageComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/meal-list']);
+  }
+
+  openAddMealModal(): void {
+    this.isAddMealModalVisible = true;
+  }
+
+  closeAddMealModal(): void {
+    this.isAddMealModalVisible = false;
+  }
+  onMealAdded(newMeal: any): void {
+    console.log('New meal added:', newMeal);
+    this.closeAddMealModal(); 
   }
 }

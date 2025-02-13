@@ -42,7 +42,7 @@
   <div class="meal-tiles">
     @for (meal of displayedMeals; track meal.id) {
       <div class="meal-tile">
-        <img [src]="'assets/' + meal.id + '.jpg'" [alt]="meal.name" />
+        <img [src]="getMealImage(meal.id)" [alt]="meal.name" />
         <h3>{{ meal.name }}</h3>
         <p>{{ meal.price }} €</p>
         <button (click)="viewMealDetails(meal.id)">See More</button>

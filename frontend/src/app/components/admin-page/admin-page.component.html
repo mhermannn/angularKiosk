@@ -4,6 +4,16 @@
     <div class="go-back-button">
         <button (click)="goBack()">Go Back</button>
       </div>
+
+      <div class="add-meal-button">
+        <button (click)="openAddMealModal()">Add Meal</button>
+      </div>
+    
+      <app-add-meal-modal
+        [isVisible]="isAddMealModalVisible"
+        (closeModal)="closeAddMealModal()"
+        (mealAdded)="onMealAdded($event)"
+      ></app-add-meal-modal>
   
     <div class="filters">
       <div class="sort">
