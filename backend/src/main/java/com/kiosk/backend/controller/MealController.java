@@ -6,6 +6,7 @@ import com.kiosk.backend.service.KioskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,9 +36,37 @@ public class MealController {
     }
 
     @PostMapping
-    public ResponseEntity<Meal> addMeal(@RequestBody Meal meal) {
+    public ResponseEntity<?> addMeal(@RequestBody Meal meal, Authentication authentication) {
+        if (!isAdmin(authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only admins can add meals");
+        }
+
+        try {
+            validateIngredients(meal.getIngredients());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body("Invalid ingredient: " + e.getMessage());
+        }
+
         Meal addedMeal = kioskService.getMealModel().addMeal(meal);
+        kioskService.saveMealsToCSV();
         return ResponseEntity.status(HttpStatus.CREATED).body(addedMeal);
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    private void validateIngredients(List<Ingredient> ingredients) {
+        for (Ingredient ingredient : ingredients) {
+            kioskService.getIngredientModel().getIngredientById(ingredient.getId());
+        }
+    }
+
+    @GetMapping("/ingredients")
+    public ResponseEntity<List<Ingredient>> getAllIngredients() {
+        List<Ingredient> ingredients = kioskService.getIngredientModel().getAllIngredients();
+        return ResponseEntity.ok(ingredients);
     }
 
     @PutMapping("/{id}")

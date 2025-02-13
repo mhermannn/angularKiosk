@@ -25,21 +25,18 @@ public class UserController {
         this.userModel = userModel;
     }
 
-    // Allow all users to retrieve a list of users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userModel.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    // Allow all users to retrieve a specific user
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         Optional<User> user = userModel.getUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Allow logged-in users to retrieve their own data
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         String username = authentication.getName();
@@ -49,7 +46,6 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Allow logged-in users to update their own data
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user, Authentication authentication) {
         String username = authentication.getName();

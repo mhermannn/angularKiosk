@@ -42,7 +42,6 @@ public class AuthController {
 
             System.out.println("Authentication successful for user: " + request.getUsername());
 
-            // Fetch the user from the database to get the ID
             Optional<User> userOptional = userRepository.findByLogin(request.getUsername());
             if (userOptional.isEmpty()) {
                 throw new RuntimeException("User not found");

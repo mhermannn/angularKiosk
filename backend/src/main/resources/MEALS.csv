@@ -15,3 +15,4 @@ id,name,category,price,ingredients
 14,Caesar Salad,WRAPS_SALADS,5.99,"lettuce,parmesan,croutons,chicken,caesar dressing"
 15,Onion Rings,FRIES_SIDES,3.29,"onion,breading,salt"
 16,Spicy Nuggets,CHICKEN,4.99,"chicken,spicy breading"
+17,New Meal,DESSERTS_ICECREAM,5.99,"kitkat,chocolate syrup"

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 @Component
 public class MealModel {
     private final List<Meal> meals = new ArrayList<>();
@@ -28,6 +29,9 @@ public class MealModel {
     }
 
     public Meal addMeal(Meal meal) {
+        for (Ingredient ingredient : meal.getIngredients()) {
+            ingredientModel.getIngredientById(ingredient.getId());
+        }
         meals.add(meal);
         return meal;
     }
