@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import org.springframework.security.core.GrantedAuthority;
 
 @RestController
 @RequestMapping("/api/users")
@@ -52,11 +53,16 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user, Authentication authentication) {
         String username = authentication.getName();
+        String role = authentication.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("ROLE_USER");
+
         Optional<User> existingUser = userModel.getAllUsers().stream()
                 .filter(u -> u.getLogin().equals(username))
                 .findFirst();
 
-        if (existingUser.isPresent() && existingUser.get().getId() == id) {
+        if (existingUser.isPresent() && (existingUser.get().getId() == id || role.equals("ROLE_ADMIN"))) {
             User updatedUser = userModel.updateUser(id, user);
             return ResponseEntity.ok(updatedUser);
         } else {
@@ -64,17 +70,28 @@ public class UserController {
         }
     }
 
-    // Allow admins or the user themselves to delete their account
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id, Authentication authentication) {
         String username = authentication.getName();
+        String role = authentication.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("ROLE_USER");
+
         Optional<User> existingUser = userModel.getAllUsers().stream()
                 .filter(u -> u.getLogin().equals(username))
                 .findFirst();
 
-        if (existingUser.isPresent() && (existingUser.get().getId() == id || existingUser.get().getRole().equals("ADMIN"))) {
-            userModel.deleteUser(id);
-            return ResponseEntity.noContent().build();
+        System.out.println("Authenticated user: " + username);
+        System.out.println("User role: " + role);
+
+        if (existingUser.isPresent() && (existingUser.get().getId() == id || role.equals("ROLE_ADMIN"))) {
+            boolean isDeleted = userModel.deleteUser(id);
+            if (isDeleted) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

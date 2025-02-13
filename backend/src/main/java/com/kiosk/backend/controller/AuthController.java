@@ -41,9 +41,18 @@ public class AuthController {
             );
 
             System.out.println("Authentication successful for user: " + request.getUsername()); // Log success
-            String token = jwtUtil.generateToken(authentication.getName());
 
-            return ResponseEntity.ok(new AuthResponse(token));
+            // Fetch the user from the database to get the ID
+            Optional<User> userOptional = userRepository.findByLogin(request.getUsername());
+            if (userOptional.isEmpty()) {
+                throw new RuntimeException("User not found");
+            }
+
+            User user = userOptional.get();
+            String token = jwtUtil.generateToken(user.getLogin());
+
+            // Return the token, userId, and username in the response
+            return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getLogin()));
 
         } catch (Exception e) {
             System.out.println("Authentication failed for user: " + request.getUsername() + ", Error: " + e.getMessage()); // Log failure

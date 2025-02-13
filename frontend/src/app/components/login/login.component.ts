@@ -1,4 +1,3 @@
-// login.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -26,10 +25,8 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.authService.login(this.username, this.password).subscribe({
-      next: (response: any) => {
-        this.authService.setCurrentUser(this.username);
-        // Update the current user
-        localStorage.setItem('currentUser', this.username); // Store the username in localStorage
+      next: (response) => {
+        // The AuthService already handles storing the token, userId, and username
         this.showPopupMessage('Login successful!');
         setTimeout(() => {
           this.router.navigate(['/meal-list']);

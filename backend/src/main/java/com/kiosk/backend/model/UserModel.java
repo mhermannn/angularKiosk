@@ -44,9 +44,33 @@ public class UserModel {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
 
-        existingUser.setLogin(updatedUser.getLogin());
-        existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        // Update the login if provided
+        if (updatedUser.getLogin() != null) {
+            existingUser.setLogin(updatedUser.getLogin());
+        }
+
+        // Update the password only if it has changed and is not already hashed
+        if (updatedUser.getPassword() != null) {
+            String newPassword = updatedUser.getPassword();
+
+            // Check if the new password is already hashed
+            if (isPasswordHashed(newPassword)) {
+                // If it's already hashed, set it directly
+                existingUser.setPassword(newPassword);
+            } else {
+                // If it's not hashed, encode it before setting
+                existingUser.setPassword(passwordEncoder.encode(newPassword));
+            }
+        }
+
         return userRepository.save(existingUser);
+    }
+
+    // Helper method to check if a password is already hashed
+    private boolean isPasswordHashed(String password) {
+        // BCrypt hashed passwords start with "$2a$", "$2b$", or "$2y$" and are 60 characters long
+        return password != null && password.length() == 60 &&
+                (password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$"));
     }
 
     public boolean deleteUser(int id) {

@@ -13,42 +13,35 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final UserRepository userRepository;
+    private final CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfig(UserRepository userRepository) {
+    public SecurityConfig(UserRepository userRepository, CorsConfigurationSource corsConfigurationSource) {
         this.userRepository = userRepository;
+        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        System.out.println("not in userDetailsService but in authenticationManager");
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> {
-            System.out.println("Loading user: " + username); // Log the username
-            return userRepository.findByLogin(username)
-                    .map(user -> {
-                        System.out.println("User found: " + user.getLogin() + ", Role: " + user.getRole()); // Log user details
-                        return org.springframework.security.core.userdetails.User.withUsername(user.getLogin())
-                                .password(user.getPassword())
-                                .authorities("ROLE_" + user.getRole().toUpperCase())
-                                .build();
-                    })
-                    .orElseThrow(() -> {
-                        System.out.println("User not found: " + username); // Log if user is not found
-                        return new UsernameNotFoundException("User not found: " + username);
-                    });
-        };
+        return username -> userRepository.findByLogin(username)
+                .map(user -> org.springframework.security.core.userdetails.User.withUsername(user.getLogin())
+                        .password(user.getPassword())
+                        .authorities("ROLE_" + user.getRole().toUpperCase())
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,48 +49,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/", "/login", "/oauth2/**", "/productlist", "/images/**", "/css/**", "/static/**", "/webjars/**").permitAll()
-
-                        // Admin-only endpoints
-                        .requestMatchers("/adminPage", "/adminChange").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        // API endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // Allow all users to retrieve data
-                        .requestMatchers(HttpMethod.POST, "/api/**").authenticated() // Only logged-in users can create data
-                        .requestMatchers(HttpMethod.PUT, "/api/**").authenticated() // Only logged-in users can update data
-                        .requestMatchers(HttpMethod.DELETE, "/api/meals/**").hasRole("ADMIN") // Only admins can delete meals
-                        .requestMatchers(HttpMethod.DELETE, "/api/cart/**").authenticated() // Allow logged-in users to remove items from their cart
-
-                        // Default rule
+                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/meals/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/cart/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").authenticated()
                         .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/ordertype", true)
-                        .failureHandler(new CustomAuthenticationFailureHandler())
-                        .permitAll()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/ordertype", true)
-                        .failureHandler((request, response, exception) -> {
-                            response.sendRedirect("/error?message=" + exception.getMessage());
-                        })
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/welcome")
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .permitAll()
                 )
                 .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }
-
