@@ -1,4 +1,3 @@
-// header.component.ts
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -33,5 +32,9 @@ export class HeaderComponent {
   getCartItemCount(): number {
     const order = this.orderService.getCurrentOrder();
     return order ? order.shoppingCart.length : 0;
+  }
+
+  goToAdmin() {
+    this.router.navigate(['/admin']);
   }
 }

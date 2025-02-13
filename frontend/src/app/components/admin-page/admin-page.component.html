@@ -1,0 +1,57 @@
+<div class="admin-page">
+    <h1>Orders</h1>
+
+    <div class="go-back-button">
+        <button (click)="goBack()">Go Back</button>
+      </div>
+  
+    <div class="filters">
+      <div class="sort">
+        <h3>Sort by Date</h3>
+        <select [(ngModel)]="selectedSort" (change)="onSortChange()">
+          @for (option of sortOptions; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  
+    <div class="order-tiles">
+      @for (order of displayedOrders; track order.orderId) {
+        <div class="order-tile">
+          <h3>Order #{{ order.orderId }}</h3>
+          <p class="status">Status: {{ order.orderStatus }}</p>
+          <p class="payment">Payment: {{ order.orderPaymentType }}</p>
+          <div class="items">
+            <p>Items:</p>
+            <ul>
+              @for (item of order.shoppingCart; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </div>
+          <p class="date">{{ order.createdAt | date: 'medium' }}</p>
+        </div>
+      }
+    </div>
+  
+    <div class="pagination">
+      @for (page of totalPages | range: 1; track page) {
+        <button
+          (click)="onPageChange(page)"
+          [class.active]="page === currentPage"
+        >
+          {{ page }}
+        </button>
+      }
+    </div>
+  
+    <div class="items-per-page">
+      <label>Items per page:</label>
+      <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+        @for (option of itemsPerPageOptions; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+    </div>
+  </div>

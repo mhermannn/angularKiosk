@@ -4,6 +4,9 @@
   @if (authService.isLoggedIn()) {
     <div class="user-info">
       <span>Hi, {{ authService.getCurrentUser() }}</span>
+      @if (authService.isAdmin()) {
+        <button (click)="goToAdmin()">Admin Page</button>
+      }
       <button (click)="goToUserAccount()">Account</button>
       <button (click)="logout()">Logout</button>
       <button (click)="goToCart()">

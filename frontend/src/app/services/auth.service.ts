@@ -7,6 +7,8 @@ export interface AuthResponse {
   token: string;
   userId: number;
   username: string;
+  role: string;
+  resources: number;
 }
 
 @Injectable({
@@ -15,17 +17,25 @@ export interface AuthResponse {
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   private currentUserIdSubject = new BehaviorSubject<number | null>(null);
+  private userRoleSubject = new BehaviorSubject<string | null>(null);
+  private userResourcesSubject = new BehaviorSubject<number | null>(null);
 
   public currentUser$ = this.currentUserSubject.asObservable();
   public currentUserId$ = this.currentUserIdSubject.asObservable();
+  public userRole$ = this.userRoleSubject.asObservable();
+  public userResources$ = this.userResourcesSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
     const storedUser = localStorage.getItem('currentUser');
     const storedUserId = localStorage.getItem('currentUserId');
+    const storedRole = localStorage.getItem('userRole');
+    const storedResources = localStorage.getItem('userResources');
 
-    if (storedUser && storedUserId) {
+    if (storedUser && storedUserId && storedRole && storedResources) {
       this.currentUserSubject.next(storedUser);
       this.currentUserIdSubject.next(Number(storedUserId));
+      this.userRoleSubject.next(storedRole);
+      this.userResourcesSubject.next(Number(storedResources));
     }
   }
 
@@ -34,20 +44,31 @@ export class AuthService {
     return this.http.post<AuthResponse>('http://localhost:9393/api/auth/login', authRequest).pipe(
       tap((response) => {
         localStorage.setItem('token', response.token);
-        this.currentUserSubject.next(response.username);
-        this.currentUserIdSubject.next(response.userId);
         localStorage.setItem('currentUser', response.username);
         localStorage.setItem('currentUserId', response.userId.toString());
+        localStorage.setItem('userRole', response.role);
+        localStorage.setItem('userResources', response.resources.toString());
+
+        this.currentUserSubject.next(response.username);
+        this.currentUserIdSubject.next(response.userId);
+        this.userRoleSubject.next(response.role);
+        this.userResourcesSubject.next(response.resources);
       })
     );
   }
 
   logout() {
-    this.currentUserSubject.next(null); 
-    this.currentUserIdSubject.next(null); 
-    localStorage.removeItem('currentUser'); 
-    localStorage.removeItem('currentUserId'); 
+    this.currentUserSubject.next(null);
+    this.currentUserIdSubject.next(null);
+    this.userRoleSubject.next(null);
+    this.userResourcesSubject.next(null);
+
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUserId');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userResources');
     localStorage.removeItem('token');
+
     this.router.navigate(['/']);
   }
 
@@ -59,8 +80,20 @@ export class AuthService {
     return this.currentUserIdSubject.value;
   }
 
+  getUserRole(): string | null {
+    return this.userRoleSubject.value;
+  }
+
+  getUserResources(): number | null {
+    return this.userResourcesSubject.value;
+  }
+
   isLoggedIn(): boolean {
     return !!this.currentUserSubject.value;
+  }
+
+  isAdmin(): boolean {
+    return this.userRoleSubject.value === 'ADMIN';
   }
 
   setCurrentUser(username: string | null): void {
@@ -71,4 +104,5 @@ export class AuthService {
       localStorage.removeItem('currentUser');
     }
   }
+  
 }

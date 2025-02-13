@@ -7,6 +7,7 @@ import { UserAccountComponent } from './components/user-account/user-account.com
 import { CartComponent } from './components/cart/cart.component';
 import { MealDetailsComponent } from './components/meal-details/meal-details.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { AdminPageComponent } from './components/admin-page/admin-page.component';
 export const routes: Routes = [
   { path: '', component: MainPageComponent },
   { path: 'meal-list', component: MealListComponent },
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'user-account', component: UserAccountComponent },
   { path: 'cart', component: CartComponent },
   { path: 'meal-details/:id', component: MealDetailsComponent },
+  { path: 'admin', component: AdminPageComponent },
   { path: '**', component: NotFoundComponent },
 ];
