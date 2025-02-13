@@ -20,7 +20,6 @@ export class AuthService {
   public currentUserId$ = this.currentUserIdSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
-    // Check for stored values in localStorage on initialization
     const storedUser = localStorage.getItem('currentUser');
     const storedUserId = localStorage.getItem('currentUserId');
 
@@ -34,14 +33,9 @@ export class AuthService {
     const authRequest = { username, password };
     return this.http.post<AuthResponse>('http://localhost:9393/api/auth/login', authRequest).pipe(
       tap((response) => {
-        // Store the token in localStorage
         localStorage.setItem('token', response.token);
-
-        // Store the username and ID in the BehaviorSubject
         this.currentUserSubject.next(response.username);
         this.currentUserIdSubject.next(response.userId);
-
-        // Store the username and ID in localStorage for persistence
         localStorage.setItem('currentUser', response.username);
         localStorage.setItem('currentUserId', response.userId.toString());
       })
@@ -49,11 +43,11 @@ export class AuthService {
   }
 
   logout() {
-    this.currentUserSubject.next(null); // Clear the current user
-    this.currentUserIdSubject.next(null); // Clear the current user ID
-    localStorage.removeItem('currentUser'); // Remove the username from localStorage
-    localStorage.removeItem('currentUserId'); // Remove the user ID from localStorage
-    localStorage.removeItem('token'); // Remove the token from localStorage
+    this.currentUserSubject.next(null); 
+    this.currentUserIdSubject.next(null); 
+    localStorage.removeItem('currentUser'); 
+    localStorage.removeItem('currentUserId'); 
+    localStorage.removeItem('token');
     this.router.navigate(['/']);
   }
 

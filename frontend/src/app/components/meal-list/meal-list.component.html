@@ -46,7 +46,9 @@
         <h3>{{ meal.name }}</h3>
         <p>{{ meal.price }} €</p>
         <button (click)="viewMealDetails(meal.id)">See More</button>
-        <button (click)="addToCart(meal.name)">Add to Cart</button>
+        @if (authService.isLoggedIn()) {
+          <button (click)="addToCart(meal.name)">Add to Cart</button>
+        }
       </div>
     }
   </div>

@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { RangePipe } from '../../range.pipe';
 import { Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
+import { AuthService } from '../../services/auth.service';
 
 interface Meal {
   id: number;
@@ -50,7 +51,8 @@ export class MealListComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private orderService: OrderService
+    private orderService: OrderService, 
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
