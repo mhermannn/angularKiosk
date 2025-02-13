@@ -11,28 +11,24 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './user-account.component.scss',
 })
 export class UserAccountComponent {
-  showDeleteConfirmation = false; // Controls the visibility of the delete confirmation dialog
-  showEditModal = false; // Controls the visibility of the edit modal
-  editUser = { username: '', password: '' }; // Stores the edited user data
+  showDeleteConfirmation = false; 
+  showEditModal = false;
+  editUser = { username: '', password: '' }; 
 
   constructor(public authService: AuthService, private router: Router, private http: HttpClient) {}
 
-  // Go back to the meal list
   goBack(): void {
     this.router.navigate(['/meal-list']);
   }
 
-  // Open the delete confirmation dialog
   confirmDelete(): void {
     this.showDeleteConfirmation = true;
   }
 
-  // Cancel the delete action
   cancelDelete(): void {
     this.showDeleteConfirmation = false;
   }
 
-  // Delete the user account
   deleteAccount(): void {
     const userId = this.authService.getCurrentUserId();
     if (userId === null) {
@@ -43,8 +39,8 @@ export class UserAccountComponent {
     this.http.delete(`http://localhost:9393/api/users/${userId}`).subscribe({
       next: () => {
         alert('Account deleted successfully.');
-        this.authService.logout(); // Log out the user after deleting the account
-        this.router.navigate(['/']); // Redirect to the home page
+        this.authService.logout(); 
+        this.router.navigate(['/']); 
       },
       error: (err) => {
         console.error('Error deleting account:', err);
@@ -53,13 +49,11 @@ export class UserAccountComponent {
     });
   }
 
-  // Open the edit modal
   openEditModal(): void {
-    this.editUser = { username: this.authService.getCurrentUser() || '', password: '' }; // Pre-fill the username
+    this.editUser = { username: this.authService.getCurrentUser() || '', password: '' }; 
     this.showEditModal = true;
   }
 
-  // Close the edit modal
   closeEditModal(): void {
     this.showEditModal = false;
   }
@@ -71,8 +65,8 @@ export class UserAccountComponent {
       return;
     }
   
-    const token = localStorage.getItem('token'); // Get the token from localStorage
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`); // Add the token to the headers
+    const token = localStorage.getItem('token'); 
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`); 
     // this.http.put(`http://localhost:9393/api/users/${userId}`, this.editUser).subscribe({
     //   next: () => {
     //     alert('User details updated successfully.');
@@ -90,7 +84,7 @@ export class UserAccountComponent {
       next: () => {
         alert('User details updated successfully.');
         this.closeEditModal();
-        this.authService.setCurrentUser(this.editUser.username); // Update the current username in AuthService
+        this.authService.setCurrentUser(this.editUser.username); 
       },
       error: (err) => {
         console.error('Error updating user details:', err);

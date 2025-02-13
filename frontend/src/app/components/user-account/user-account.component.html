@@ -3,16 +3,12 @@
   <p>Welcome, {{ authService.getCurrentUser() }}!</p>
   <p>Here you can manage your account details.</p>
 
-  <!-- Delete Account Button -->
   <button (click)="confirmDelete()">Delete Account</button>
 
-  <!-- Edit User Button -->
   <button (click)="openEditModal()">Edit User</button>
 
-  <!-- Go Back Button -->
   <button (click)="goBack()">Go Back</button>
 
-  <!-- Confirmation Dialog -->
   @if (showDeleteConfirmation) {
     <div class="confirmation-dialog">
       <p>Are you sure you want to delete your account? This action cannot be undone.</p>
@@ -21,7 +17,6 @@
     </div>
   }
 
-  <!-- Edit User Modal -->
   @if (showEditModal) {
     <div class="modal">
       <div class="modal-content">
