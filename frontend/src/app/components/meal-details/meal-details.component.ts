@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
 import { MealDto } from '../../shared/models/meal.dto';
 import { environment } from '../../../enviroments/enviroments';
 import { AuthService } from '../../services/auth.service';
+import { AddMealModalComponent } from '../add-meal-modal/add-meal-modal.component';
 
 @Component({
   selector: 'app-meal-details',
-  imports: [],
+  imports: [AddMealModalComponent],
   templateUrl: './meal-details.component.html',
   styleUrl: './meal-details.component.scss',
   standalone: true,
@@ -21,7 +22,7 @@ export class MealDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
-    public authService: AuthService
+    public authService: AuthService,
   ) {}
 
   public ngOnInit(): void {
@@ -42,7 +43,7 @@ export class MealDetailsComponent implements OnInit {
   
     if (!this.authService.isAdmin()) {
       alert("You don't have permission to delete meals.");
-      
+
       return;
     }
   
@@ -74,5 +75,19 @@ export class MealDetailsComponent implements OnInit {
 
     return mealId <= 16 ? imagePath : backupImagePath;
   }
-  
+
+  public isEditMealModalVisible = false;
+
+  public openEditMealModal(): void {
+    this.isEditMealModalVisible = true;
+  }
+
+  public closeEditMealModal(): void {
+    this.isEditMealModalVisible = false;
+  }
+
+  public onMealUpdated(updatedMeal: MealDto): void {
+    this.meal = updatedMeal;
+    this.closeEditMealModal();
+  }
 }

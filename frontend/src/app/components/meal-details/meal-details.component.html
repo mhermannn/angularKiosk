@@ -9,8 +9,15 @@
     }
   </ul>
   @if (authService.isAdmin()) {
-    <button (click)="goBack()">Edit Meal</button>
+    <button (click)="openEditMealModal()">Edit Meal</button>
     <button (click)="deleteMeal()">Delete Meal</button>
   }
+
+  <app-add-meal-modal
+    [isVisible]="isEditMealModalVisible"
+    [meal]="meal"
+    (closeModal)="closeEditMealModal()"
+    (mealUpdated)="onMealUpdated($event)"
+  ></app-add-meal-modal>
   <button (click)="goBack()">Go Back</button>
 </div>
