@@ -65,18 +65,35 @@ export class AddMealModalComponent implements OnInit, OnChanges {
     this.selectedIngredients = this.ingredients
       .filter((ingredient) => this.ingredientSelection[ingredient.id])
       .map((ingredient) => ingredient.id);
+  
+    if (!this.meal) {
+      alert('Meal data is missing.');
 
-    if (!this.meal?.name || !this.meal.price || this.selectedIngredients.length === 0) {
-      alert('Please fill out all fields and select at least one ingredient.');
-      
       return;
     }
+  
+    if (!this.meal.name || this.meal.name.length < 3 || this.meal.name.length > 20) {
+      alert('Name must be between 3 and 20 characters.');
 
+      return;
+    }
+  
+    const price = Number(this.meal.price);
+    if (!price || price <= 0 || price >= 100) {
+      alert('Price must be greater than 0 and less than 100.');
+      return;
+    }
+  
+    if (this.selectedIngredients.length === 0) {
+      alert('Please select at least one ingredient.');
+      return;
+    }
+  
     const mealToSubmit: MealDto = {
-      ...this.meal!,
+      ...this.meal,
       ingredients: this.selectedIngredients.map((id) => this.ingredients.find((ingredient) => ingredient.id === id)!),
     };
-
+  
     if (this.isEditMode) {
       this.http
         .put<MealDto>(`${environment.apiUrl}/meals/${mealToSubmit.id}`, mealToSubmit, {
@@ -90,12 +107,11 @@ export class AddMealModalComponent implements OnInit, OnChanges {
           error: (error) => console.error('Failed to update meal:', error),
         });
     } else {
-
       this.http.get<MealDto[]>(`${environment.apiUrl}/meals`).subscribe({
         next: (meals) => {
-          const maxId = meals.length > 0 ? Math.max(...meals.map((meal) => meal.id)) : 100;
+          const maxId: number = meals.length > 0 ? Math.max(...meals.map((meal) => meal.id)) : 100;
           mealToSubmit.id = maxId + 1;
-
+  
           this.http
             .post<MealDto>(`${environment.apiUrl}/meals`, mealToSubmit, {
               headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -114,7 +130,7 @@ export class AddMealModalComponent implements OnInit, OnChanges {
       });
     }
   }
-
+  
   public onClose(): void {
     this.closeModal.emit();
   }
@@ -129,5 +145,9 @@ export class AddMealModalComponent implements OnInit, OnChanges {
     };
     this.selectedIngredients = [];
     this.ingredientSelection = {};
+  }
+
+  public toNumber(value: any): number {
+    return Number(value);
   }
 }

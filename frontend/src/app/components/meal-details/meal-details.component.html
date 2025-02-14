@@ -1,4 +1,5 @@
 <div class="meal-details">
+  <button (click)="goBack()">Go Back</button>
   <h1>{{ meal?.name }}</h1>
   <img [src]="getMealImage(meal?.id ?? 100)" [alt]="meal?.name" />
   <p>Price: {{ meal?.price }} €</p>
@@ -19,5 +20,4 @@
     (closeModal)="closeEditMealModal()"
     (mealUpdated)="onMealUpdated($event)"
   ></app-add-meal-modal>
-  <button (click)="goBack()">Go Back</button>
 </div>

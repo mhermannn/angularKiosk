@@ -5,6 +5,9 @@
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" id="name" [(ngModel)]="meal!.name" name="name" required />
+        @if (meal!.name && (meal!.name.length < 3 || meal!.name.length > 20)){
+          <div class="error">Name must be between 3 and 20 characters.</div>
+        }
       </div>
 
       <div class="form-group">
@@ -19,6 +22,9 @@
       <div class="form-group">
         <label for="price">Price:</label>
         <input type="number" id="price" [(ngModel)]="meal!.price" name="price" step="0.01" required />
+        @if (meal!.price && (toNumber(meal!.price) <= 0 || toNumber(meal!.price) >= 100)){
+          <div class="error">Price must be greater than 0 and less than 100</div>
+        }
       </div>
 
       <div class="form-group">
@@ -39,6 +45,9 @@
           }
           @empty {
             <p>No ingredients available.</p>
+          }
+          @if (selectedIngredients.length === 0){
+            <div class="error">Please select at least one ingredient.</div>
           }
         </div>
       </div>

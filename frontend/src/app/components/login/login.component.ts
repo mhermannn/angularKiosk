@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ErrorResponseDto } from '../../shared/models/errorresponse.dto';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent {
           this.router.navigate(['/meal-list']);
         }, 1000);
       },
-      error: (error) => {
+      error: (error: ErrorResponseDto) => {
         console.error('Login failed!', error);
         this.showPopupMessage('Invalid credentials. Please try again.');
       },

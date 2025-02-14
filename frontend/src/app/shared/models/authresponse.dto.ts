@@ -1,7 +1,7 @@
 export interface AuthResponseDto {
-  token: string;
-  userId: number;
-  username: string;
-  role: string;
-  resources: number;
+  readonly token: string;
+  readonly userId: number;
+  readonly username: string;
+  readonly role: string;
+  readonly resources: number;
 }
