@@ -7,11 +7,7 @@
       @if (authService.isAdmin()) {
         <button (click)="goToAdmin()">Admin Page</button>
       }
-      <button (click)="goToUserAccount()">Account</button>
       <button (click)="logout()">Logout</button>
-      <button (click)="goToCart()">
-        Cart ({{ getCartItemCount() }})
-      </button>
     </div>
   } @else {
     <div class="login-prompt">

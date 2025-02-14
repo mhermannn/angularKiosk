@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RangePipe } from '../../range.pipe';
 import { Router } from '@angular/router';
-import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { MealDto } from '../../shared/models/meal.dto';
 import { environment } from '../../../enviroments/enviroments';
@@ -43,7 +42,6 @@ export class MealListComponent implements OnInit {
   public constructor(
     private http: HttpClient,
     private router: Router,
-    private orderService: OrderService, 
     public authService: AuthService
   ) {}
 
@@ -125,9 +123,6 @@ export class MealListComponent implements OnInit {
     this.router.navigate(['/meal-details', mealId]);
   }
 
-  public addToCart(mealName: string): void {
-    this.orderService.addToCart(mealName);
-  }
 
   public getMealImage(mealId: number): string {
     const imagePath = `assets/${mealId}.jpg`;
