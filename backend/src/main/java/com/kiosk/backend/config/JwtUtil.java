@@ -26,11 +26,11 @@ public class JwtUtil {
         String role = userDetails.getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
-                .orElse("ROLE_USER"); // Default role if none is found
+                .orElse("ROLE_USER");
 
         return Jwts.builder()
                 .setSubject(username)
-                .claim("role", role) // Add the role as a claim
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
@@ -50,7 +50,7 @@ public class JwtUtil {
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
-                .get("role", String.class); // Extract the role from the token
+                .get("role", String.class);
     }
 
     public boolean validateToken(String token, String username) {

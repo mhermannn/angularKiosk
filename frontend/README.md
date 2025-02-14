@@ -2,58 +2,65 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
 
-## Development server
+## Environment Requirements
 
-To start a local development server, run:
+To set up and run this project, you need to have the following software installed on your machine:
 
-```bash
-ng serve
-```
+- [Node.js](https://nodejs.org/) (version 14.x or higher recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+- [Angular CLI](https://angular.io/cli) (version 19.0.6 or higher)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Project Dependencies
 
-## Code scaffolding
+The project dependencies are listed in the `package.json` file. Key dependencies include:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `@angular/animations`: ^17.0.0
+- `@angular/cdk`: ^17.0.0
+- `@angular/common`: ^17.0.0
+- `@angular/compiler`: ^17.0.0
+- `@angular/core`: ^17.0.0
+- `@angular/flex-layout`: ^15.0.0-beta.42
+- `@angular/forms`: ^17.0.0
+- `@angular/material`: ^17.3.10
+- `@angular/platform-browser`: ^17.0.0
+- `@angular/platform-browser-dynamic`: ^17.0.0
 
-```bash
-ng generate component component-name
-```
+For a complete list of dependencies, refer to the [`package.json`](package.json) file.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Setting Up the Project
 
-```bash
-ng generate --help
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/mhermannn/angularKiosk.git
+   cd frontend
+   ```
 
-## Building
+2. **Install the dependencies:**
+   ```bash
+   npm install
+   ```
 
-To build the project run:
+3. **Development Server:**
+   To start a local development server, run:
+   ```bash
+   ng serve
+   ```
+   Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-```bash
-ng build
-```
+4. **Building the Project:**
+   To build the project, run:
+   ```bash
+   npm run build
+   ```
+   This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+5. **Running Linting:**
+   To run linting on the project, use:
+   ```bash
+   npm run lint
+   ```
+   To automatically fix linting issues, use:
+   ```bash
+   npm run lint:fix
+   ```
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
