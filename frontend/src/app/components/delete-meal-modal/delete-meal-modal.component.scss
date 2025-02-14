@@ -1,28 +1,133 @@
+@use 'sass:map';
+@import '../../../styles.scss';
+
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  select {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-    background-color: white;
-    padding: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    width: 400px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+
+    &:focus {
+      border-color: map.get($mc-yellow, 500);
+    }
+
+    option {
+      padding: 10px;
+    }
   }
-  
-  .form-group {
-    margin-bottom: 15px;
+
+  button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: white;
+    background-color: map.get($mc-red, 500);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: map.get($mc-red, 700);
+    }
   }
-  
-  .form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+}
+
+button[type="button"] {
+  background-color: #ccc;
+  color: black;
+
+  &:hover {
+    background-color: #aaa;
   }
+}
+
+.validation-message {
+  margin-top: 15px;
+  font-size: 14px;
+  color: red;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &.cancel {
+      background-color: #ccc;
+      color: black;
+
+      &:hover {
+        background-color: #aaa;
+      }
+    }
+
+    &.submit {
+      background-color: map.get($mc-yellow, 500);
+      color: black;
+
+      &:hover {
+        background-color: map.get($mc-yellow, 700);
+      }
+    }
+  }
+}
+
+button[type="submit"] {
+  background-color: map.get($mc-yellow, 500);
+  color: black;
+
+  &:hover {
+    background-color: map.get($mc-yellow, 700);
+  }
+}

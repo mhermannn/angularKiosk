@@ -1,23 +1,50 @@
+@use 'sass:map';
+@import '../../../styles.scss';
+
 .main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh; 
+  padding: 20px;
+  background-color: map.get($mc-offwhite, 500);
+
+  .buttons {
+    margin-top: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 90vh;
-    // gap: 20px;
-    .buttons{
-      display: flex;
-      margin-top: 2vh;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-      width: 40vw;
+    width: 100%;
+
+    button {
+      background-color: map.get($mc-red, 500);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, transform 0.2s;
+
+      &:hover {
+        background-color: map.get($mc-red, 700);
+        transform: scale(1.05);
+      }
     }
   }
-  
-  button {
-    width: 200px;
-    margin: 10px;
-    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+    min-height: auto;
+
+    .buttons {
+      button {
+        width: 90%;
+        font-size: 16px;
+      }
+    }
   }
+}

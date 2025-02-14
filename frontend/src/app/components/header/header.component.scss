@@ -1,36 +1,87 @@
+@use 'sass:map';
+@import '../../../styles.scss';
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
+  padding: 15px 30px;
+  background-color: map.get($mc-red, 500);
+  color: white;
 
   .logo {
-    height: 50px;
+    height: 40px;
     cursor: pointer;
   }
 
   .user-info, .login-prompt {
     display: flex;
     align-items: center;
-    gap: 1rem;
 
     span {
-      font-weight: bold;
+      margin-right: 15px;
+      font-size: 16px;
     }
 
     button {
-      padding: 0.5rem 1rem;
+      background-color: map.get($mc-yellow, 500);
+      color: black;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 8px 16px;
       border: none;
-      border-radius: 4px;
-      background-color: #007bff;
-      color: white;
+      border-radius: 5px;
       cursor: pointer;
+      margin-left: 10px;
+      transition: background-color 0.3s ease-in-out;
 
       &:hover {
-        background-color: #0056b3;
+        background-color: map.get($mc-yellow, 700);
       }
+    }
+  }
+
+  .login-prompt {
+    display: flex;
+    justify-content: center;
+    button {
+      font-size: 16px;
+      font-weight: bold;
+      padding: 10px 20px;
+      background-color: map.get($mc-yellow, 500);
+      color: black;
+      border-radius: 5px;
+      transition: background-color 0.3s ease-in-out;
+
+      &:hover {
+        background-color: map.get($mc-yellow, 700);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .logo {
+    height: 30px; 
+  }
+
+  .user-info, .login-prompt {
+    flex-direction: column;
+    align-items: center;
+
+    span {
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      margin-bottom: 10px; 
     }
   }
 }

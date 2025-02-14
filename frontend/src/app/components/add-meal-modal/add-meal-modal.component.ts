@@ -61,74 +61,112 @@ export class AddMealModalComponent implements OnInit, OnChanges {
     });
   }
 
+  private isMealValid(meal: MealDto | null): boolean {
+    if (!meal) {
+      alert('Meal data is missing.');
+
+      return false;
+    }
+
+    return true;
+  }
+  
+  private isMealNameValid(name: string | undefined): boolean {
+    if (!name || name.length < 3 || name.length > 20) {
+      alert('Name must be between 3 and 20 characters.');
+
+      return false;
+    }
+
+    return true;
+  }
+  
+  private isMealPriceValid(price: string | number): boolean {
+    const priceNum = Number(price);
+    if (!priceNum || priceNum <= 0 || priceNum >= 100) {
+      alert('Price must be greater than 0 and less than 100.');
+
+      return false;
+    }
+
+    return true;
+  }
+  
+  private validateMeal(meal: MealDto | null): boolean {
+    return this.isMealValid(meal) &&
+           this.isMealNameValid(meal?.name) &&
+           this.isMealPriceValid(meal?.price ?? '') &&
+           this.isIngredientsSelected();
+  }
+  
+  private isIngredientsSelected(): boolean {
+    if (this.selectedIngredients.length === 0) {
+      alert('Please select at least one ingredient.');
+
+      return false;
+    }
+
+    return true;
+  }
+  
   public onSubmit(): void {
     this.selectedIngredients = this.ingredients
       .filter((ingredient) => this.ingredientSelection[ingredient.id])
       .map((ingredient) => ingredient.id);
-  
-    if (!this.meal) {
-      alert('Meal data is missing.');
+
+    if (!this.validateMeal(this.meal)) {
 
       return;
     }
-  
-    if (!this.meal.name || this.meal.name.length < 3 || this.meal.name.length > 20) {
-      alert('Name must be between 3 and 20 characters.');
 
-      return;
-    }
-  
-    const price = Number(this.meal.price);
-    if (!price || price <= 0 || price >= 100) {
-      alert('Price must be greater than 0 and less than 100.');
-      return;
-    }
-  
-    if (this.selectedIngredients.length === 0) {
-      alert('Please select at least one ingredient.');
-      return;
-    }
-  
     const mealToSubmit: MealDto = {
-      ...this.meal,
+      ...this.meal!,
       ingredients: this.selectedIngredients.map((id) => this.ingredients.find((ingredient) => ingredient.id === id)!),
     };
-  
+
     if (this.isEditMode) {
-      this.http
-        .put<MealDto>(`${environment.apiUrl}/meals/${mealToSubmit.id}`, mealToSubmit, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        })
-        .subscribe({
-          next: (updatedMeal) => {
-            this.mealUpdated.emit(updatedMeal);
-            this.closeModal.emit();
-          },
-          error: (error) => console.error('Failed to update meal:', error),
-        });
+      this.updateMeal(mealToSubmit);
     } else {
-      this.http.get<MealDto[]>(`${environment.apiUrl}/meals`).subscribe({
-        next: (meals) => {
-          const maxId: number = meals.length > 0 ? Math.max(...meals.map((meal) => meal.id)) : 100;
-          mealToSubmit.id = maxId + 1;
-  
-          this.http
-            .post<MealDto>(`${environment.apiUrl}/meals`, mealToSubmit, {
-              headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-            })
-            .subscribe({
-              next: (newMeal) => {
-                this.mealAdded.emit(newMeal);
-                this.closeModal.emit();
-              },
-              error: (error) => console.error('Failed to add meal:', error),
-            });
-        },
-        error: (error) => {
-          console.error('Failed to fetch meals for ID generation:', error);
-        },
-      });
+      this.addMeal(mealToSubmit);
     }
+  }
+
+  private updateMeal(meal: MealDto): void {
+    this.http
+      .put<MealDto>(`${environment.apiUrl}/meals/${meal.id}`, meal, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+      .subscribe({
+        next: (updatedMeal) => {
+          this.mealUpdated.emit(updatedMeal);
+          this.closeModal.emit();
+        },
+        error: (error) => console.error('Failed to update meal:', error),
+      });
+  }
+
+  private addMeal(meal: MealDto): void {
+    this.http.get<MealDto[]>(`${environment.apiUrl}/meals`).subscribe({
+      next: (meals) => {
+        const maxId: number = meals.length > 0 ? Math.max(...meals.map((meal) => meal.id)) : 100;
+        meal.id = maxId + 1;
+
+        this.http
+          .post<MealDto>(`${environment.apiUrl}/meals`, meal, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          })
+          .subscribe({
+            next: (newMeal) => {
+              this.mealAdded.emit(newMeal);
+              this.closeModal.emit();
+            },
+            error: (error) => console.error('Failed to add meal:', error),
+          });
+      },
+      error: (error) => {
+        console.error('Failed to fetch meals for ID generation:', error);
+      },
+    });
   }
   
   public onClose(): void {
@@ -147,7 +185,7 @@ export class AddMealModalComponent implements OnInit, OnChanges {
     this.ingredientSelection = {};
   }
 
-  public toNumber(value: any): number {
+  public toNumber(value: string): number {
     return Number(value);
   }
 }

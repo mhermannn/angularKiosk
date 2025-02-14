@@ -1,101 +1,113 @@
-.modal-overlay {
+@use 'sass:map';
+@import '../../../styles.scss';
+
+.modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
 .modal-content {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
   width: 400px;
-  max-width: 90%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.3s ease-out;
-}
-
-.modal-content h2 {
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  text-align: center;
 }
 
 .form-group {
-  margin-bottom: 1rem;
-}
+  margin-bottom: 15px;
 
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: black;
+  }
 
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+
+    &:focus {
+      border-color: map.get($mc-red, 500);
+    }
+  }
+
+  .error {
+    font-size: 12px;
+    color: red;
+    margin-top: 5px;
+  }
 }
 
 .ingredients-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
 
-.ingredient-checkbox {
-  flex: 1 1 45%;
+  .ingredient-checkbox {
+    margin-bottom: 10px;
+
+    label {
+      font-size: 14px;
+    }
+
+    input {
+      margin-right: 10px;
+    }
+  }
+
+  p {
+    font-size: 14px;
+    color: gray;
+  }
 }
 
 .form-actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-}
+  justify-content: flex-end;
+  gap: 10px;
 
-.button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 
-.button.cancel {
-  background: #ccc;
-  color: #333;
-}
+    &.cancel {
+      background-color: #ccc;
+      color: black;
 
-.button.cancel:hover {
-  background: #bbb;
-}
+      &:hover {
+        background-color: #aaa;
+      }
+    }
 
-.button.submit {
-  background: #4caf50;
-  color: #fff;
-}
+    &.submit {
+      background-color: map.get($mc-yellow, 500);
+      color: black;
 
-.button.submit:hover {
-  background: #45a049;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+      &:hover {
+        background-color: map.get($mc-yellow, 700);
+      }
+    }
   }
 }

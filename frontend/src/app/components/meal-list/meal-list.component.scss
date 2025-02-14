@@ -1,65 +1,195 @@
+@use 'sass:map';
+@import '../../../styles.scss';
+
 .meal-list {
-    padding: 40px;
+  padding: 40px;
   
-    .search-bar {
-      margin-bottom: 20px;
-      input {
-        width: 80%;
-        padding: 10px;
-        font-size: 16px;
+  .search-bar {
+    margin-bottom: 20px;
+    input {
+      width: 80%;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.3s;
+
+      &:focus {
+        border-color: map.get($mc-yellow, 500);
       }
-    }
-  
-    .filters {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      margin-left: 5vw;
-      margin-right: 5vw;
-      .cat{
-        .for{
-          display: flex;
-        }
-        // .category-filter {
-        //   display: flex;
-        //   margin-bottom: 10px;
-        // }
+
+      &::placeholder {
+        color: #aaa;
       }
-      .sor{
-        display: flex;
-      }
-      
-    }
-  
-    .meal-tiles {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-      .meal-tile {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: center;
-        img {
-          max-width: 100%;
-          height: auto;
-        }
-      }
-    }
-  
-    .pagination {
-      margin-top: 20px;
-      button {
-        margin: 0 5px;
-        padding: 5px 10px;
-        &.active {
-          background-color: #007bff;
-          color: white;
-        }
-      }
-    }
-  
-    .items-per-page {
-      margin-top: 20px;
     }
   }
+
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 5vw;
+    margin-right: 5vw;
+
+    .cat {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      
+      .category-filter {
+        display: flex;
+        align-items: center;
+        label {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          font-size: 14px;
+          color: #333;
+        }
+
+        input {
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .sor {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      h3 {
+        font-size: 16px;
+        color: #333;
+      }
+
+      select {
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        transition: border-color 0.3s;
+        
+        &:focus {
+          border-color: map.get($mc-yellow, 500);
+        }
+      }
+    }
+  }
+
+  .meal-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    
+    .meal-tile {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      
+      img {
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        transition: transform 0.3s ease-in-out;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+
+      h3 {
+        font-size: 18px;
+        color: #333;
+        margin: 10px 0;
+      }
+
+      p {
+        font-size: 16px;
+        color: #777;
+        margin-bottom: 15px;
+      }
+
+      button {
+        background-color: map.get($mc-yellow, 500);
+        color: black;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+        
+        &:hover {
+          background-color: map.get($mc-yellow, 700);
+        }
+
+        &:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    
+    button {
+      margin: 0 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      background-color: #ccc;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      
+      &.active {
+        background-color: map.get($mc-yellow, 500);
+        color: black;
+      }
+
+      &:hover:not(.active) {
+        background-color: #aaa;
+      }
+    }
+  }
+
+  .items-per-page {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    label {
+      font-size: 14px;
+      color: #333;
+      margin-right: 10px;
+    }
+
+    select {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.3s;
+
+      &:focus {
+        border-color: map.get($mc-yellow, 500);
+      }
+    }
+  }
+}

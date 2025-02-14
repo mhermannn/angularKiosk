@@ -1,73 +1,86 @@
-.register-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-  
-    h1 {
+@use 'sass:map';
+@import '../../../styles.scss';
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background-color: map.get($mc-offwhite, 500);  
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: map.get($mc-red, 700);  
+  }
+
+  form {
+    width: 100%;
+    
+    .form-group {
       margin-bottom: 20px;
-      font-size: 24px;
-      color: #3f51b5;
-    }
-  
-    form {
-      display: flex;
-      flex-direction: column;
-      width: 300px;
-  
-      .form-group {
-        margin-bottom: 20px;
-  
-        label {
-          display: block;
-          margin-bottom: 5px;
-          font-weight: bold;
-        }
-  
-        input {
-          width: 100%;
-          padding: 8px;
-          font-size: 16px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-  
-        small {
-          color: red;
-          font-size: 12px;
-        }
+
+      label {
+        font-size: 1rem;
+        color: map.get($mc-red, 700);  
+        display: block;
+        margin-bottom: 8px;
       }
-  
-      button {
-        padding: 10px;
+
+      input {
+        width: 100%;
+        padding: 12px;
         font-size: 16px;
-        background-color: #3f51b5;
-        color: white;
-        border: none;
+        border: 1px solid #ccc;
         border-radius: 4px;
-        cursor: pointer;
-  
-        &:hover {
-          background-color: #303f9f;
+        box-sizing: border-box;
+        background-color: #fff;
+
+        &:focus {
+          outline: none;
+          border-color: map.get($mc-red, 500); 
         }
-  
-        &:disabled {
-          background-color: #ccc;
-          cursor: not-allowed;
+
+        &::placeholder {
+          color: #aaa;
         }
       }
     }
-  
-    .popup {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 10px 20px;
-      background-color: #4caf50;
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: map.get($mc-yellow, 500);  
       color: white;
+      border: none;
       border-radius: 4px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: map.get($mc-yellow, 600);  
+      }
+
+      &:focus {
+        outline: none;
+      }
     }
   }
+
+  .popup {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: map.get($mc-red, 50);  
+    color: map.get($mc-red, 700); 
+    border: 1px solid map.get($mc-red, 300);  
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+  }
+}
