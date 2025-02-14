@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AddMealModalComponent } from '../add-meal-modal/add-meal-modal.component'; 
 import { DeleteMealModalComponent } from '../delete-meal-modal/delete-meal-modal.component';
 import { OrderDto } from '../../shared/models/order.dto';
+import { environment } from '../../../enviroments/enviroments';
 import { MealDto } from '../../shared/models/meal.dto';
 
 @Component({
@@ -39,7 +40,7 @@ export class AdminPageComponent implements OnInit {
   }
 
   private fetchOrders(): void {
-    this.http.get<OrderDto[]>('http://localhost:9393/api/orders').subscribe((data) => {
+    this.http.get<OrderDto[]>(`${environment.apiUrl}/orders`).subscribe((data) => {
       this.orders = data;
       this.applySorting();
       this.updatePagination();

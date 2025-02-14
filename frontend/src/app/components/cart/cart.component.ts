@@ -3,6 +3,7 @@ import { OrderService } from '../../services/order.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MealDto } from '../../shared/models/meal.dto';
+import { environment } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-cart',
@@ -29,7 +30,7 @@ export class CartComponent implements OnInit {
     const order = this.orderService.getCurrentOrder();
     if (order) {
       order.shoppingCart.forEach((mealName) => {
-        this.http.get<MealDto[]>('http://localhost:9393/api/meals').subscribe((meals) => {
+        this.http.get<MealDto[]>(`${environment.apiUrl}/meals`).subscribe((meals) => {
           const meal = meals.find((m) => m.name === mealName);
           if (meal) {
             this.cartItems.push({ name: meal.name, price: meal.price });

@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-user-account',
@@ -38,7 +39,7 @@ export class UserAccountComponent {
       return;
     }
 
-    this.http.delete(`http://localhost:9393/api/users/${userId}`).subscribe({
+    this.http.delete(`${environment.apiUrl}/users/${userId}`).subscribe({
       next: () => {
         alert('Account deleted successfully.');
         this.authService.logout(); 
@@ -71,7 +72,7 @@ export class UserAccountComponent {
     const token = localStorage.getItem('token'); 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`); 
     
-    this.http.put(`http://localhost:9393/api/users/${userId}`, this.editUser, { headers }).subscribe({
+    this.http.put(`${environment.apiUrl}/users/${userId}`, this.editUser, { headers }).subscribe({
       next: () => {
         alert('User details updated successfully.');
         this.closeEditModal();

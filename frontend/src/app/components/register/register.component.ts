@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { environment } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-register',
@@ -41,7 +42,7 @@ export class RegisterComponent {
 
     console.log('Sending registration request:', registerRequest); 
 
-    this.http.post<{ message: string }>('http://localhost:9393/api/users/register', registerRequest).subscribe({
+    this.http.post<{ message: string }>(`${environment.apiUrl}/users/register`, registerRequest).subscribe({
       next: (response) => {
         console.log('Registration successful! Response:', response);
         this.showPopupMessage(response.message || 'Registration successful! Redirecting to login...');

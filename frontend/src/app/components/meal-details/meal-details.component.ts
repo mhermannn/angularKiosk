@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MealDto } from '../../shared/models/meal.dto';
+import { environment } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-meal-details',
@@ -20,7 +21,7 @@ export class MealDetailsComponent implements OnInit {
   public ngOnInit(): void {
     const mealId = this.route.snapshot.paramMap.get('id');
     if (mealId) {
-      this.http.get<MealDto>(`http://localhost:9393/api/meals/${mealId}`).subscribe((meal) => {
+      this.http.get<MealDto>(`${environment.apiUrl}/meals/${mealId}`).subscribe((meal) => {
         this.meal = meal;
       });
     }

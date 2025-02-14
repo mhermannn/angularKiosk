@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MealDto } from '../../shared/models/meal.dto';
+import { environment } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-delete-meal-modal',
@@ -38,7 +39,7 @@ export class DeleteMealModalComponent implements OnInit {
   }
 
   private fetchMeals(): void {
-    this.http.get<MealDto[]>('http://localhost:9393/api/meals').subscribe({
+    this.http.get<MealDto[]>(`${environment.apiUrl}/meals`).subscribe({
       next: (data) => {
         this.meals = data;
         this.availableMeals = [...this.meals];
@@ -135,7 +136,7 @@ export class DeleteMealModalComponent implements OnInit {
   private async deleteMeal(mealId: number): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http
-        .delete(`http://localhost:9393/api/meals/${mealId}`, {
+        .delete(`${environment.apiUrl}/meals/${mealId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .subscribe({

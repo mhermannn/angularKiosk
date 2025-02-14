@@ -5,6 +5,7 @@ import { OrderDto } from '../shared/models/order.dto';
 import { OrderPaymentType } from '../shared/enums/order-payment-type';
 import { OrderStatus } from '../shared/enums/order-status';
 import { OrderType } from '../shared/enums/order-type';
+import { environment } from '../../enviroments/enviroments';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,13 +26,13 @@ export class OrderService {
       createdAt: new Date().toISOString(),
     };
 
-    this.http.post<OrderDto>('http://localhost:9393/api/orders', newOrder).subscribe((order) => {
+    this.http.post<OrderDto>(`${environment.apiUrl}/orders`, newOrder).subscribe((order) => {
       this.currentOrderSubject.next(order);
     });
   }
 
   public updateOrder(order: OrderDto): void {
-    this.http.put<OrderDto>(`http://localhost:9393/api/orders/${order.orderId}`, order).subscribe((updatedOrder) => {
+    this.http.put<OrderDto>(`${environment.apiUrl}/orders/${order.orderId}`, order).subscribe((updatedOrder) => {
       this.currentOrderSubject.next(updatedOrder);
     });
   }

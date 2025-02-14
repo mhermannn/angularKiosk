@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { MealDto } from '../../shared/models/meal.dto';
+import { environment } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-meal-list',
@@ -51,7 +52,7 @@ export class MealListComponent implements OnInit {
   }
 
   private fetchMeals(): void {
-    this.http.get<MealDto[]>('http://localhost:9393/api/meals').subscribe((data) => {
+    this.http.get<MealDto[]>(`${environment.apiUrl}/meals`).subscribe((data) => {
       this.meals = data;
       this.applyFilters();
     });

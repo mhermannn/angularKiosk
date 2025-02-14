@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import { IngredientDto } from '../../shared/models/ingredient.dto';
 import { MealDto } from '../../shared/models/meal.dto';
+import { environment } from '../../../enviroments/enviroments';
 
 @Component({
   selector: 'app-add-meal-modal',
@@ -39,7 +40,7 @@ export class AddMealModalComponent implements OnInit {
   }
 
   private fetchIngredients(): void {
-    this.http.get<IngredientDto[]>('http://localhost:9393/api/meals/ingredients').subscribe({
+    this.http.get<IngredientDto[]>(`${environment.apiUrl}/meals/ingredients`).subscribe({
       next: (data) => {
         this.ingredients = data;
         this.ingredients.forEach((ingredient) => {
@@ -69,7 +70,7 @@ export class AddMealModalComponent implements OnInit {
       return;
     }
   
-    this.http.get<MealDto[]>('http://localhost:9393/api/meals').subscribe({
+    this.http.get<MealDto[]>(`${environment.apiUrl}/meals`).subscribe({
       next: (meals) => {
         const maxId = meals.length > 0 ? Math.max(...meals.map((meal) => meal.id)) : 100;
         this.meal.id = maxId + 1;
@@ -78,7 +79,7 @@ export class AddMealModalComponent implements OnInit {
           return this.ingredients.find((ingredient) => ingredient.id === id)!;
         });
   
-        this.http.post<MealDto>('http://localhost:9393/api/meals', this.meal, {
+        this.http.post<MealDto>(`${environment.apiUrl}/meals`, this.meal, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         }).subscribe({
           next: (newMeal) => {

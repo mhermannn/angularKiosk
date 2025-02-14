@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AuthResponseDto } from '../shared/models/authresponse.dto';
-
+import { environment } from '../../enviroments/enviroments';
 @Injectable({
   providedIn: 'root',
 })
@@ -35,7 +35,7 @@ export class AuthService {
   public login(username: string, password: string): Observable<AuthResponseDto> {
     const authRequest = { username, password };
 
-    return this.http.post<AuthResponseDto>('http://localhost:9393/api/auth/login', authRequest).pipe(
+    return this.http.post<AuthResponseDto>(`${environment.apiUrl}/auth/login`, authRequest).pipe(
       tap((response) => {
         localStorage.setItem('token', response.token);
         localStorage.setItem('currentUser', response.username);
