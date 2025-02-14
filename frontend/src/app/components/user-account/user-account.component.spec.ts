@@ -10,7 +10,7 @@ describe('UserAccountComponent', () => {
     await TestBed.configureTestingModule({
       imports: [UserAccountComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(UserAccountComponent);
     component = fixture.componentInstance;

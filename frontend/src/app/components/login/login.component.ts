@@ -13,20 +13,16 @@ import { RouterModule } from '@angular/router';
   standalone: true,
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
-  showPopup: boolean = false; // Controls the visibility of the popup
-  popupMessage: string = ''; // Stores the message to display in the popup
+  public username = '';
+  public password = '';
+  public showPopup = false;
+  public popupMessage = '';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  public constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit(): void {
+  public onSubmit(): void {
     this.authService.login(this.username, this.password).subscribe({
-      next: (response) => {
-        // The AuthService already handles storing the token, userId, and username
+      next: () => {
         this.showPopupMessage('Login successful!');
         setTimeout(() => {
           this.router.navigate(['/meal-list']);
@@ -39,7 +35,7 @@ export class LoginComponent {
     });
   }
 
-  showPopupMessage(message: string): void {
+  public showPopupMessage(message: string): void {
     this.popupMessage = message;
     this.showPopup = true;
     setTimeout(() => {

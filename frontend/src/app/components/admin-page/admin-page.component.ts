@@ -6,16 +6,8 @@ import { RangePipe } from '../../range.pipe';
 import { Router } from '@angular/router';
 import { AddMealModalComponent } from '../add-meal-modal/add-meal-modal.component'; 
 import { DeleteMealModalComponent } from '../delete-meal-modal/delete-meal-modal.component';
-
-interface Order {
-  orderId: number;
-  customerId: number;
-  orderType: string;
-  orderStatus: string;
-  orderPaymentType: string;
-  shoppingCart: string[];
-  createdAt: string;
-}
+import { OrderDto } from '../../shared/models/order.dto';
+import { MealDto } from '../../shared/models/meal.dto';
 
 @Component({
   selector: 'app-admin-page',
@@ -25,36 +17,36 @@ interface Order {
   standalone: true,
 })
 export class AdminPageComponent implements OnInit {
-  orders: Order[] = [];
-  displayedOrders: Order[] = [];
+  public orders: OrderDto[] = [];
+  public displayedOrders: OrderDto[] = [];
 
-  itemsPerPageOptions = [4, 8, 16];
-  itemsPerPage = 8;
-  currentPage = 1;
-  totalPages = 1;
+  public itemsPerPageOptions = [4, 8, 16];
+  public itemsPerPage = 8;
+  public currentPage = 1;
+  public totalPages = 1;
 
-  sortOptions = ['Newest to Oldest', 'Oldest to Newest'];
-  selectedSort = 'Newest to Oldest';
+  public sortOptions = ['Newest to Oldest', 'Oldest to Newest'];
+  public selectedSort = 'Newest to Oldest';
 
-  showOrders: boolean = false;
-  isAddMealModalVisible: boolean = false; 
-  isDeleteMealModalVisible: boolean = false; 
+  public showOrders = false;
+  public isAddMealModalVisible = false; 
+  public isDeleteMealModalVisible = false; 
 
-  constructor(private http: HttpClient, private router: Router) {}
+  public constructor(private http: HttpClient, private router: Router) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.fetchOrders();
   }
 
-  fetchOrders(): void {
-    this.http.get<Order[]>('http://localhost:9393/api/orders').subscribe((data) => {
+  private fetchOrders(): void {
+    this.http.get<OrderDto[]>('http://localhost:9393/api/orders').subscribe((data) => {
       this.orders = data;
       this.applySorting();
       this.updatePagination();
     });
   }
 
-  applySorting(): void {
+  private applySorting(): void {
     if (this.selectedSort === 'Newest to Oldest') {
       this.orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     } else if (this.selectedSort === 'Oldest to Newest') {
@@ -63,61 +55,61 @@ export class AdminPageComponent implements OnInit {
     this.updateDisplayedOrders();
   }
 
-  updatePagination(): void {
+  private updatePagination(): void {
     this.totalPages = Math.ceil(this.orders.length / this.itemsPerPage);
     this.currentPage = 1;
     this.updateDisplayedOrders();
   }
 
-  updateDisplayedOrders(): void {
+  public updateDisplayedOrders(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.displayedOrders = this.orders.slice(startIndex, endIndex);
   }
 
-  onPageChange(page: number): void {
+  public onPageChange(page: number): void {
     this.currentPage = page;
     this.updateDisplayedOrders();
   }
 
-  onItemsPerPageChange(): void {
+  public onItemsPerPageChange(): void {
     this.updatePagination();
   }
 
-  onSortChange(): void {
+  public onSortChange(): void {
     this.applySorting();
   }
 
-  goBack(): void {
+  public goBack(): void {
     this.router.navigate(['/meal-list']);
   }
 
-  openAddMealModal(): void {
+  public openAddMealModal(): void {
     this.isAddMealModalVisible = true;
   }
 
-  openDeleteMealModal(): void {
+  public openDeleteMealModal(): void {
     this.isDeleteMealModalVisible = true;
   }
 
-  toggleOrders(): void {
+  public toggleOrders(): void {
     this.showOrders = !this.showOrders;
   }
 
-  closeAddMealModal(): void {
+  public closeAddMealModal(): void {
     this.isAddMealModalVisible = false;
   }
 
-  closeDeleteMealModal(): void {
+  public closeDeleteMealModal(): void {
     this.isDeleteMealModalVisible = false;
   }
 
-  onMealDeleted(deletedMealIds: number[]): void {
+  public onMealDeleted(deletedMealIds: number[]): void {
     console.log('Meals deleted:', deletedMealIds);
     this.closeDeleteMealModal();
   }
 
-  onMealAdded(newMeal: any): void {
+  public onMealAdded(newMeal: MealDto): void {
     console.log('New meal added:', newMeal);
     this.closeAddMealModal(); 
   }

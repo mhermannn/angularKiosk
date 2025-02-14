@@ -4,11 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-interface Meal {
-  id: number;
-  name: string;
-}
+import { MealDto } from '../../shared/models/meal.dto';
 
 @Component({
   selector: 'app-delete-meal-modal',
@@ -18,97 +14,105 @@ interface Meal {
   standalone: true,
 })
 export class DeleteMealModalComponent implements OnInit {
-  @Input() isVisible: boolean = false;
-  @Output() closeModal = new EventEmitter<void>();
-  @Output() mealsDeleted = new EventEmitter<number[]>();
+  @Input() public isVisible = false;
+  @Output() public closeModal = new EventEmitter<void>();
+  @Output() public mealsDeleted = new EventEmitter<number[]>();
 
-  deleteMealForm: FormGroup;
-  meals: Meal[] = [];
-  availableMeals: Meal[] = [];
-  validationMessage: string = '';
+  public deleteMealForm: FormGroup;
+  public meals: MealDto[] = [];
+  public availableMeals: MealDto[] = [];
+  public validationMessage = '';
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService) {
+  public constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
     this.deleteMealForm = this.fb.group({
-      meals: this.fb.array([])
+      meals: this.fb.array([]),
     });
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.fetchMeals();
   }
 
-  fetchMeals(): void {
-    this.http.get<Meal[]>('http://localhost:9393/api/meals').subscribe({
+  private fetchMeals(): void {
+    this.http.get<MealDto[]>('http://localhost:9393/api/meals').subscribe({
       next: (data) => {
         this.meals = data;
         this.availableMeals = [...this.meals];
       },
       error: (error) => {
         console.error('Failed to fetch meals:', error);
-      }
+      },
     });
   }
 
-  get mealsFormArray(): FormArray {
+  public get mealsFormArray(): FormArray {
     return this.deleteMealForm.get('meals') as FormArray;
   }
 
-  addMealDropdown(): void {
-    const mealControl = new FormControl('', Validators.required); 
+  public addMealDropdown(): void {
+    const mealControl = new FormControl('', Validators.required);
     this.mealsFormArray.push(mealControl);
     this.updateAvailableMeals();
   }
 
-  removeMealDropdown(index: number): void {
+  public removeMealDropdown(index: number): void {
     this.mealsFormArray.removeAt(index);
     this.updateAvailableMeals();
   }
 
-  onMealSelect(index: number): void {
+  public onMealSelect(): void {
     this.updateAvailableMeals();
     this.validateForm();
   }
 
-  updateAvailableMeals(): void {
+  private updateAvailableMeals(): void {
     const selectedMealIds = this.mealsFormArray.controls
-      .map(control => control.value)
-      .filter(value => value !== ''); 
+      .map((control) => control.value)
+      .filter((value) => value !== '');
 
-    this.availableMeals = this.meals.filter(meal => !selectedMealIds.includes(meal.id));
+    this.availableMeals = this.meals.filter((meal) => !selectedMealIds.includes(meal.id));
   }
 
-  validateForm(): void {
-    const selectedMealIds = this.mealsFormArray.controls.map(control => control.value);
+  private validateForm(): void {
+    const selectedMealIds = this.mealsFormArray.controls.map((control) => control.value);
 
-    const duplicateMeals = selectedMealIds.filter((mealId, index) => selectedMealIds.indexOf(mealId) !== index && mealId !== '');
+    const duplicateMeals = selectedMealIds.filter(
+      (mealId, index) => selectedMealIds.indexOf(mealId) !== index && mealId !== ''
+    );
     if (duplicateMeals.length > 0) {
-      this.validationMessage = 'You have selected the same meal more than once. Please change one of the selections.';
+      this.validationMessage =
+        'You have selected the same meal more than once. Please change one of the selections.';
+
       return;
     }
 
     const hasDefaultOption = selectedMealIds.includes('');
     if (hasDefaultOption) {
       this.validationMessage = 'Please select a meal for all dropdowns or remove the empty ones.';
+      
       return;
     }
 
     this.validationMessage = '';
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     this.validateForm();
-
     if (this.validationMessage) {
-      return; 
+      return;
     }
 
-    const selectedMealIds = this.mealsFormArray.controls.map(control => control.value);
+    const selectedMealIds = this.mealsFormArray.controls.map((control) => control.value);
     if (confirm('Are you sure you want to delete the selected meals?')) {
       this.deleteMealsSequentially(selectedMealIds);
     }
   }
 
-  async deleteMealsSequentially(mealIds: number[]): Promise<void> {
+  private async deleteMealsSequentially(mealIds: number[]): Promise<void> {
     const deletedMealIds: number[] = [];
 
     for (const mealId of mealIds) {
@@ -128,18 +132,20 @@ export class DeleteMealModalComponent implements OnInit {
     }
   }
 
-  deleteMeal(mealId: number): Promise<void> {
+  private async deleteMeal(mealId: number): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.http.delete(`http://localhost:9393/api/meals/${mealId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      }).subscribe({
-        next: () => resolve(),
-        error: (error) => reject(error)
-      });
+      this.http
+        .delete(`http://localhost:9393/api/meals/${mealId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        .subscribe({
+          next: () => resolve(),
+          error: (error) => reject(error),
+        });
     });
   }
 
-  onClose(): void {
+  public onClose(): void {
     this.closeModal.emit();
   }
 }

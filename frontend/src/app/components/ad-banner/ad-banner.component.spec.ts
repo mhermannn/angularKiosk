@@ -10,7 +10,7 @@ describe('AdBannerComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AdBannerComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdBannerComponent);
     component = fixture.componentInstance;

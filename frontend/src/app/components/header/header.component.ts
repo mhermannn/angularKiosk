@@ -9,32 +9,34 @@ import { CommonModule } from '@angular/common';
   imports: [RouterModule, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  standalone: true
 })
 export class HeaderComponent {
-  constructor(
+  public constructor(
     public authService: AuthService,
     public orderService: OrderService,
     private router: Router
   ) {}
 
-  logout() {
+  public logout(): void {
     this.authService.logout();
   }
 
-  goToUserAccount() {
+  public goToUserAccount(): void {
     this.router.navigate(['/user-account']);
   }
 
-  goToCart() {
+  public goToCart(): void {
     this.router.navigate(['/cart']);
   }
 
-  getCartItemCount(): number {
+  public getCartItemCount(): number {
     const order = this.orderService.getCurrentOrder();
+    
     return order ? order.shoppingCart.length : 0;
   }
 
-  goToAdmin() {
+  public goToAdmin(): void {
     this.router.navigate(['/admin']);
   }
 }

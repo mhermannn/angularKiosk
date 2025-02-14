@@ -2,14 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-
-export interface AuthResponse {
-  token: string;
-  userId: number;
-  username: string;
-  role: string;
-  resources: number;
-}
+import { AuthResponseDto } from '../shared/models/authresponse.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +18,7 @@ export class AuthService {
   public userRole$ = this.userRoleSubject.asObservable();
   public userResources$ = this.userResourcesSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
+  public constructor(private http: HttpClient, private router: Router) {
     const storedUser = localStorage.getItem('currentUser');
     const storedUserId = localStorage.getItem('currentUserId');
     const storedRole = localStorage.getItem('userRole');
@@ -39,9 +32,10 @@ export class AuthService {
     }
   }
 
-  login(username: string, password: string): Observable<AuthResponse> {
+  public login(username: string, password: string): Observable<AuthResponseDto> {
     const authRequest = { username, password };
-    return this.http.post<AuthResponse>('http://localhost:9393/api/auth/login', authRequest).pipe(
+
+    return this.http.post<AuthResponseDto>('http://localhost:9393/api/auth/login', authRequest).pipe(
       tap((response) => {
         localStorage.setItem('token', response.token);
         localStorage.setItem('currentUser', response.username);
@@ -57,7 +51,7 @@ export class AuthService {
     );
   }
 
-  logout() {
+  public logout(): void {
     this.currentUserSubject.next(null);
     this.currentUserIdSubject.next(null);
     this.userRoleSubject.next(null);
@@ -72,31 +66,31 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  getCurrentUser(): string | null {
+  public getCurrentUser(): string | null {
     return this.currentUserSubject.value;
   }
 
-  getCurrentUserId(): number | null {
+  public getCurrentUserId(): number | null {
     return this.currentUserIdSubject.value;
   }
 
-  getUserRole(): string | null {
+  public getUserRole(): string | null {
     return this.userRoleSubject.value;
   }
 
-  getUserResources(): number | null {
+  public getUserResources(): number | null {
     return this.userResourcesSubject.value;
   }
 
-  isLoggedIn(): boolean {
+  public isLoggedIn(): boolean {
     return !!this.currentUserSubject.value;
   }
 
-  isAdmin(): boolean {
+  public isAdmin(): boolean {
     return this.userRoleSubject.value === 'ADMIN';
   }
 
-  setCurrentUser(username: string | null): void {
+  public setCurrentUser(username: string | null): void {
     this.currentUserSubject.next(username);
     if (username) {
       localStorage.setItem('currentUser', username);
@@ -104,5 +98,4 @@ export class AuthService {
       localStorage.removeItem('currentUser');
     }
   }
-  
 }

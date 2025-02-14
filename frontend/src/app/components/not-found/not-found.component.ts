@@ -5,12 +5,13 @@ import { Router } from '@angular/router';
   selector: 'app-not-found',
   imports: [],
   templateUrl: './not-found.component.html',
-  styleUrl: './not-found.component.scss'
+  styleUrl: './not-found.component.scss',
+  standalone: true,
 })
 export class NotFoundComponent {
-  constructor(private router: Router) {}
+  public constructor(private router: Router) {}
 
-  goBack(): void {
+  public goBack(): void {
     this.router.navigate(['/']);
   }
 

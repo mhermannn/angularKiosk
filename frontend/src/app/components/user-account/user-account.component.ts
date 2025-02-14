@@ -9,30 +9,32 @@ import { FormsModule } from '@angular/forms';
   imports: [FormsModule],
   templateUrl: './user-account.component.html',
   styleUrl: './user-account.component.scss',
+  standalone: true,
 })
 export class UserAccountComponent {
-  showDeleteConfirmation = false; 
-  showEditModal = false;
-  editUser = { username: '', password: '' }; 
+  public showDeleteConfirmation = false; 
+  public showEditModal = false;
+  public editUser = { username: '', password: '' }; 
 
-  constructor(public authService: AuthService, private router: Router, private http: HttpClient) {}
+  public constructor(public authService: AuthService, private router: Router, private http: HttpClient) {}
 
-  goBack(): void {
+  public goBack(): void {
     this.router.navigate(['/meal-list']);
   }
 
-  confirmDelete(): void {
+  public confirmDelete(): void {
     this.showDeleteConfirmation = true;
   }
 
-  cancelDelete(): void {
+  public cancelDelete(): void {
     this.showDeleteConfirmation = false;
   }
 
-  deleteAccount(): void {
+  public deleteAccount(): void {
     const userId = this.authService.getCurrentUserId();
     if (userId === null) {
       alert('User ID not found. Please log in again.');
+
       return;
     }
 
@@ -49,37 +51,26 @@ export class UserAccountComponent {
     });
   }
 
-  openEditModal(): void {
+  public openEditModal(): void {
     this.editUser = { username: this.authService.getCurrentUser() || '', password: '' }; 
     this.showEditModal = true;
   }
 
-  closeEditModal(): void {
+  public closeEditModal(): void {
     this.showEditModal = false;
   }
 
-  saveChanges(): void {
+  public saveChanges(): void {
     const userId = this.authService.getCurrentUserId();
     if (userId === null) {
       alert('User ID not found. Please log in again.');
+      
       return;
     }
   
     const token = localStorage.getItem('token'); 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`); 
-    // this.http.put(`http://localhost:9393/api/users/${userId}`, this.editUser).subscribe({
-    //   next: () => {
-    //     alert('User details updated successfully.');
-    //     this.closeEditModal();
-  
-    //     // Update the current username in AuthService
-    //     this.authService.setCurrentUser(this.editUser.username);
-    //   },
-    //   error: (err) => {
-    //     console.error('Error updating user details:', err);
-    //     alert('Failed to update user details. Please try again.');
-    //   },
-    // });
+    
     this.http.put(`http://localhost:9393/api/users/${userId}`, this.editUser, { headers }).subscribe({
       next: () => {
         alert('User details updated successfully.');

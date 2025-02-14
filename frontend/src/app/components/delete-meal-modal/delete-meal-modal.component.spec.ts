@@ -10,7 +10,7 @@ describe('DeleteMealModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DeleteMealModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DeleteMealModalComponent);
     component = fixture.componentInstance;

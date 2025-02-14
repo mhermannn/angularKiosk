@@ -7,7 +7,7 @@
             @for (mealControl of mealsFormArray.controls; track i; let i = $index) {
               <div class="form-group">
                 <label for="meal-{{i}}">Meal {{i + 1}}:</label>
-                <select [formControlName]="i" (change)="onMealSelect(i)">
+                <select [formControlName]="i" (change)="onMealSelect()">
                   <option value="">Select a meal</option>
                   @for (meal of availableMeals; track meal.id) {
                     <option [value]="meal.id">{{ meal.name }}</option>

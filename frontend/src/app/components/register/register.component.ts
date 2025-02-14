@@ -12,11 +12,11 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
 })
 export class RegisterComponent {
-  registerForm: FormGroup;
-  showPopup: boolean = false; // Controls the visibility of the popup
-  popupMessage: string = ''; // Stores the message to display in the popup
+  public registerForm: FormGroup;
+  public showPopup = false; 
+  public popupMessage = ''; 
 
-  constructor(
+  public constructor(
     private http: HttpClient,
     private router: Router,
     private fb: FormBuilder
@@ -27,42 +27,40 @@ export class RegisterComponent {
     });
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     if (this.registerForm.invalid) {
       this.showPopupMessage('Please fill out the form correctly.');
+
       return;
     }
 
-    const registerRequest = {
-      username: this.registerForm.value.username,
-      password: this.registerForm.value.password,
+    const registerRequest: { username: string; password: string } = {
+      username: this.registerForm.value.username as string,
+      password: this.registerForm.value.password as string,
     };
 
-    console.log('Sending registration request:', registerRequest); // Debugging
+    console.log('Sending registration request:', registerRequest); 
 
-    this.http.post('http://localhost:9393/api/users/register', registerRequest).subscribe({
-      next: (response: any) => {
-        console.log('Registration successful! Response:', response); // Debugging
+    this.http.post<{ message: string }>('http://localhost:9393/api/users/register', registerRequest).subscribe({
+      next: (response) => {
+        console.log('Registration successful! Response:', response);
         this.showPopupMessage(response.message || 'Registration successful! Redirecting to login...');
     
-        // Redirect to the login page after a short delay
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 2000); // Redirect after 2 seconds
+        }, 2000); 
       },
-      error: (error) => {
-        console.error('Registration failed! Error:', error); // Debugging
+      error: (error: { error?: { message?: string } }) => {
+        console.error('Registration failed! Error:', error); 
         this.showPopupMessage(error.error?.message || 'Registration failed. Please try again.');
       },
     });
   }
 
-  // Helper function to show the popup message
-  showPopupMessage(message: string): void {
+  public showPopupMessage(message: string): void {
     this.popupMessage = message;
     this.showPopup = true;
 
-    // Hide the popup after 3 seconds
     setTimeout(() => {
       this.showPopup = false;
     }, 3000);

@@ -10,7 +10,7 @@ describe('AddMealModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AddMealModalComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AddMealModalComponent);
     component = fixture.componentInstance;

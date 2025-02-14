@@ -1,39 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
-interface Meal {
-  id: number;
-  name: string;
-  price: string;
-}
+import { MealDto } from '../../shared/models/meal.dto';
 
 @Component({
   selector: 'app-cart',
   imports: [],
   templateUrl: './cart.component.html',
-  styleUrl: './cart.component.scss'
+  styleUrl: './cart.component.scss',
+  standalone: true,
 })
-export class CartComponent {
-  cartItems: { name: string; price: string }[] = [];
-  totalPrice: number = 0;
+export class CartComponent implements OnInit {
+  public cartItems: { name: string; price: string }[] = [];
+  public totalPrice = 0;
 
-  constructor(
+  public constructor(
     public orderService: OrderService,
     private router: Router,
     private http: HttpClient
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadCartItems();
   }
 
-  loadCartItems(): void {
+  private loadCartItems(): void {
     const order = this.orderService.getCurrentOrder();
     if (order) {
       order.shoppingCart.forEach((mealName) => {
-        this.http.get<Meal[]>('http://localhost:9393/api/meals').subscribe((meals) => {
+        this.http.get<MealDto[]>('http://localhost:9393/api/meals').subscribe((meals) => {
           const meal = meals.find((m) => m.name === mealName);
           if (meal) {
             this.cartItems.push({ name: meal.name, price: meal.price });
@@ -44,8 +40,7 @@ export class CartComponent {
     }
   }
 
-  goBack(): void {
+  public goBack(): void {
     this.router.navigate(['/meal-list']);
   }
-
 }

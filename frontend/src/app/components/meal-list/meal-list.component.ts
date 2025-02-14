@@ -6,14 +6,7 @@ import { RangePipe } from '../../range.pipe';
 import { Router } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
-
-interface Meal {
-  id: number;
-  name: string;
-  category: string;
-  price: string;
-  ingredients: { id: number; name: string }[];
-}
+import { MealDto } from '../../shared/models/meal.dto';
 
 @Component({
   selector: 'app-meal-list',
@@ -23,17 +16,17 @@ interface Meal {
   standalone: true,
 })
 export class MealListComponent implements OnInit {
-  meals: Meal[] = [];
-  filteredMeals: Meal[] = [];
-  displayedMeals: Meal[] = [];
+  public meals: MealDto[] = [];
+  public filteredMeals: MealDto[] = [];
+  public displayedMeals: MealDto[] = [];
 
-  itemsPerPageOptions = [4, 8, 16];
-  itemsPerPage = 8;
-  currentPage = 1;
-  totalPages = 1;
-  searchQuery = '';
+  public itemsPerPageOptions = [4, 8, 16];
+  public itemsPerPage = 8;
+  public currentPage = 1;
+  public totalPages = 1;
+  public searchQuery = '';
 
-  categories = [
+  public categories = [
     'DESSERTS_ICECREAM',
     'COLD_DRINKS',
     'HOT_DRINKS',
@@ -42,39 +35,39 @@ export class MealListComponent implements OnInit {
     'FRIES_SIDES',
     'CHICKEN',
   ];
-  selectedCategories: string[] = [];
-  sortOptions = ['Low to High', 'High to Low', 'A to Z', 'Z to A'];
-  selectedSort = 'Low to High';
+  public selectedCategories: string[] = [];
+  public sortOptions = ['Low to High', 'High to Low', 'A to Z', 'Z to A'];
+  public selectedSort = 'Low to High';
 
-  constructor(
+  public constructor(
     private http: HttpClient,
     private router: Router,
     private orderService: OrderService, 
     public authService: AuthService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.fetchMeals();
   }
 
-  fetchMeals(): void {
-    this.http.get<Meal[]>('http://localhost:9393/api/meals').subscribe((data) => {
+  private fetchMeals(): void {
+    this.http.get<MealDto[]>('http://localhost:9393/api/meals').subscribe((data) => {
       this.meals = data;
       this.applyFilters();
     });
   }
 
-  applyFilters(): void {
+  public applyFilters(): void {
     this.filteredMeals = this.meals.filter((meal) =>
       meal.name.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
-  
+
     if (this.selectedCategories.length > 0) {
       this.filteredMeals = this.filteredMeals.filter((meal) =>
         this.selectedCategories.includes(meal.category)
       );
     }
-  
+
     if (this.selectedSort === 'Low to High') {
       this.filteredMeals.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     } else if (this.selectedSort === 'High to Low') {
@@ -84,37 +77,36 @@ export class MealListComponent implements OnInit {
     } else if (this.selectedSort === 'Z to A') {
       this.filteredMeals.sort((a, b) => b.name.localeCompare(a.name));
     }
-  
+
     this.updatePagination();
   }
-  
 
-  updatePagination(): void {
+  private updatePagination(): void {
     this.totalPages = Math.ceil(this.filteredMeals.length / this.itemsPerPage);
     this.currentPage = 1;
     this.updateDisplayedMeals();
   }
 
-  updateDisplayedMeals(): void {
+  private updateDisplayedMeals(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.displayedMeals = this.filteredMeals.slice(startIndex, endIndex);
   }
 
-  onPageChange(page: number): void {
+  public onPageChange(page: number): void {
     this.currentPage = page;
     this.updateDisplayedMeals();
   }
 
-  onItemsPerPageChange(): void {
+  public onItemsPerPageChange(): void {
     this.updatePagination();
   }
 
-  onSearch(): void {
+  public onSearch(): void {
     this.applyFilters();
   }
 
-  onCategoryChange(category: string, event: Event): void {
+  public onCategoryChange(category: string, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
       this.selectedCategories.push(category);
@@ -124,21 +116,22 @@ export class MealListComponent implements OnInit {
     this.applyFilters();
   }
 
-  onSortChange(): void {
+  public onSortChange(): void {
     this.applyFilters();
   }
 
-  viewMealDetails(mealId: number): void {
+  public viewMealDetails(mealId: number): void {
     this.router.navigate(['/meal-details', mealId]);
   }
 
-  addToCart(mealName: string): void {
+  public addToCart(mealName: string): void {
     this.orderService.addToCart(mealName);
   }
 
-  getMealImage(mealId: number): string {
+  public getMealImage(mealId: number): string {
     const imagePath = `assets/${mealId}.jpg`;
     const backupImagePath = 'assets/backup.png';
+
     return mealId <= 16 ? imagePath : backupImagePath;
   }
 }

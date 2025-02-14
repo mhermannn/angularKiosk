@@ -1,3 +1,8 @@
-<div class="ad-banner" (click)="goToAd()">
+<div class="ad-banner" 
+     role="button" 
+     tabindex="0" 
+     (click)="goToAd()" 
+     (keydown.enter)="goToAd()" 
+     (keydown.space)="goToAd()">
   <img src="assets/walentynki.png" alt="Advertisement" />
 </div>

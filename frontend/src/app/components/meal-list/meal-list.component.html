@@ -65,8 +65,8 @@
   </div>
 
   <div class="items-per-page">
-    <label>Items per page:</label>
-    <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+    <label for="itemsPerPage">Items per page:</label>
+    <select id="itemsPerPage" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
       @for (option of itemsPerPageOptions; track option) {
         <option [value]="option">{{ option }}</option>
       }
