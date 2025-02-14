@@ -1,6 +1,6 @@
 <div class="meal-details">
   <h1>{{ meal?.name }}</h1>
-  <img [src]="'assets/' + meal?.id + '.jpg'" [alt]="meal?.name" />
+  <img [src]="getMealImage(meal?.id ?? 100)" [alt]="meal?.name" />
   <p>Price: {{ meal?.price }} €</p>
   <p>Ingredients:</p>
   <ul>
@@ -8,5 +8,9 @@
       <li>{{ ingredient.name }}</li>
     }
   </ul>
+  @if (authService.isAdmin()) {
+    <button (click)="goBack()">Edit Meal</button>
+    <button (click)="deleteMeal()">Delete Meal</button>
+  }
   <button (click)="goBack()">Go Back</button>
 </div>
