@@ -1,44 +1,34 @@
 @if (isVisible) {
   <div class="modal-content">
     <h2>{{ isEditMode ? 'Edit Meal' : 'Add New Meal' }}</h2>
-    <form (ngSubmit)="onSubmit()">
+    <form [formGroup]="mealForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" [(ngModel)]="meal!.name" name="name" required />
-        @if (meal!.name && (meal!.name.length < 3 || meal!.name.length > 20)){
-          <div class="error">Name must be between 3 and 20 characters.</div>
-        }
+        <input type="text" id="name" formControlName="name" required />
+        <app-validation-error [control]="mealForm.get('name')"></app-validation-error>
       </div>
 
       <div class="form-group">
         <label for="category">Category:</label>
-        <select id="category" [(ngModel)]="meal!.category" name="category" required>
-          @for (category of categories; track category) {
-            <option [value]="category">{{ category }}</option>
-          }
+        <select id="category" formControlName="category" required>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
         </select>
+        <app-validation-error [control]="mealForm.get('category')"></app-validation-error>
       </div>
 
       <div class="form-group">
         <label for="price">Price:</label>
-        <input type="number" id="price" [(ngModel)]="meal!.price" name="price" step="0.01" required />
-        @if (meal!.price && (toNumber(meal!.price) <= 0 || toNumber(meal!.price) >= 100)){
-          <div class="error">Price must be greater than 0 and less than 100</div>
-        }
+        <input type="number" id="price" formControlName="price" step="0.01" required />
+        <app-validation-error [control]="mealForm.get('price')"></app-validation-error>
       </div>
 
       <div class="form-group">
-        <label for="form-group">Ingredients:</label>
-        <div class="ingredients-container">
-          @for (ingredient of ingredients; track ingredient.id) {
+        <label for="ingredients">Ingredients:</label>
+        <div formArrayName="ingredients">
+          @for ( ingredient of ingredients; track $index) {
             <div class="ingredient-checkbox">
-              <label for="ingredient-{{ ingredient.id }}">
-                <input
-                  type="checkbox"
-                  id="ingredient-{{ ingredient.id }}"
-                  [(ngModel)]="ingredientSelection[ingredient.id]"
-                  name="ingredients-{{ ingredient.id }}"
-                />
+              <label>
+                <input type="checkbox" [formControlName]="$index" />
                 {{ ingredient.name }}
               </label>
             </div>
@@ -46,15 +36,14 @@
           @empty {
             <p>No ingredients available.</p>
           }
-          @if (selectedIngredients.length === 0){
-            <div class="error">Please select at least one ingredient.</div>
-          }
         </div>
       </div>
 
       <div class="form-actions">
         <button type="button" (click)="onClose()">Cancel</button>
-        <button type="submit">{{ isEditMode ? 'Update Meal' : 'Add Meal' }}</button>
+        <button type="submit" [disabled]="mealForm.invalid">
+          {{ isEditMode ? 'Update Meal' : 'Add Meal' }}
+        </button>
       </div>
     </form>
   </div>

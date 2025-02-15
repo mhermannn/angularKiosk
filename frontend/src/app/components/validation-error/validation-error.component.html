@@ -1,0 +1,20 @@
+<div class="error-message">
+    @if (control?.invalid && (control?.dirty || control?.touched)) {
+      @if (control?.errors?.['required']) {
+        <div>This field is required.</div>
+      }
+      @if (control?.errors?.['minlength']) {
+        <div>Minimum length is {{ control?.errors?.['minlength']?.requiredLength }} characters.</div>
+      }
+      @if (control?.errors?.['maxlength']) {
+        <div>Maximum length is {{ control?.errors?.['maxlength']?.requiredLength }} characters.</div>
+      }
+      @if (control?.errors?.['min']) {
+        <div>Value must be greater than {{ control?.errors?.['min']?.min }}.</div>
+      }
+      @if (control?.errors?.['max']) {
+        <div>Value must be less than {{ control?.errors?.['max']?.max }}.</div>
+      }
+    }
+  </div>
+  
