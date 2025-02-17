@@ -73,9 +73,11 @@ Admins have access to:
 
 #### Admin Actions
 ![Admin Page Add Meal](README_images/admin_add.png)
+
 Admins can add meals with real-time validation.
 
 ![Admin Page Delete Meals](README_images/delete_admin.png)
+
 Admins can delete multiple meals at once, with validation preventing accidental duplicate selections.
 
 ## Setup
