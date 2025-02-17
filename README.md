@@ -19,6 +19,7 @@ In this project, I use concepts and technologies such as:
 - **Role-Based Access Control**: Restricts certain features based on user roles.
 - **Validation & Error Handling**: Ensures data integrity and user guidance.
 - **Responsive Design**: Provides a seamless experience across different devices.
+- **Modals for Interaction**:  Used for adding, editing, and selecting meals for deletion, improving usability by keeping users on the same page.
 
 ## Walkthrough with Images
 
@@ -69,7 +70,8 @@ Admins have access to:
 - **Order Management**: View all previous orders, sort them by date (Oldest–Newest, Newest–Oldest), and paginate through them (4, 8, 16 orders per page).
 - **Meal Management**:
   - **Adding Meals**: Requires valid input, including a minimum name length of 4 characters, choosing a meal category, a price between **0.01–99.99**, and at least one ingredient.
-  - **Deleting Meals**: Supports batch deletion, ensuring no duplicate selections or placeholder options.
+  - **Deleting Meals**: Managed through a **selection modal**, where admins can **choose multiple meals to delete**, ensuring no duplicates or placeholder selections. A **confirmation** step prevents accidental deletions.
+
 
 #### Admin Actions
 ![Admin Page Add Meal](README_images/admin_add.png)
