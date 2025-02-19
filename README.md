@@ -2,8 +2,8 @@
 
 ## Table of Contents
 1. [Description](#description)
-2. [Walkthrough](#walkthrough)
-3. [Concepts Used](#concepts-used)
+2. [Concepts Used](#concepts-used)
+3. [Walkthrough](#walkthrough)
 4. [Setup](#setup)
 
 ## Description
